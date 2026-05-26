@@ -1,0 +1,260 @@
+/* =============================================================
+   Tactician — Color + Type System
+   Decision engine for endurance performance.
+   Dark mode is the default. Light mode flips on .light or via
+   prefers-color-scheme: light.
+   ============================================================= */
+
+/* ---------- Webfonts ---------- */
+
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url("fonts/InterTight-Light.ttf") format("truetype");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/JetBrainsMono-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* ---------- Tokens — DARK MODE (default) ----------
+   Tactician's canonical mode. Near-black canvas, elevated dark tiles,
+   pure-white as the contrast accent for active state. */
+
+:root {
+  /* Backgrounds — 5-stop stack */
+  --bg-base:      #0D0D0C;   /* app canvas */
+  --bg-raised:    #1A1A19;   /* nav bars, sheet surface */
+  --bg-card:      #272725;   /* primary card / panel */
+  --bg-elevated:  #343432;   /* input fill, subtle elevation (NOT active) */
+  --bg-subtle:    #41413E;   /* chip default, unselected */
+  --bg-drawer:    #060605;   /* sits below bg-base, recessed */
+  --bg-ink:       #070706;   /* deepest ink, T3 charts */
+
+  /* Active state — the contrast engine */
+  --bg-active:        #FFFFFF;   /* selected pills, primary CTA, slider fill, toggle ON */
+  --bg-active-card:   #D8D8D5;   /* card-sized active surface (softer than pure white) */
+  --text-on-active:   #0A0A09;   /* text on bg-active / bg-active-card */
+
+  /* Text */
+  --text-primary:    #F3F3F2;   /* headings, primary content */
+  --text-secondary:  #C1C1BE;   /* labels, secondary copy */
+  --text-muted:      #A8A8A4;   /* metadata, timestamps */
+  --text-dim:        #757570;   /* disabled, placeholder */
+  --text-ghost:      #454541;   /* lowest-contrast scaffolding */
+
+  /* Border */
+  --border:        #343432;
+  --border-soft:   #23231F;
+
+  /* Status — identical in both modes */
+  --status-on-track:   #12A12A;
+  --status-at-risk:    #FFAA00;
+  --status-deviating:  #D42B25;
+
+  /* Phase colors (training block phases) */
+  --phase-base:   #4A90D9;
+  --phase-build:  #FFAA00;
+  --phase-peak:   #D42B25;
+  --phase-taper:  #12A12A;
+  --phase-race:   #9B59B6;
+
+  /* Spacing — 4px base unit */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Radius */
+  --radius-chip:   6px;
+  --radius-input:  8px;
+  --radius-card:   10px;
+  --radius-modal:  16px;
+  --radius-pill:   9999px;
+
+  /* Type families */
+  --font-ui:    "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Type scale — must match Theme.swift exactly */
+  --fs-display: 32px;   --fw-display: 600;   --lh-display: 1.05;   /* large metric callout */
+  --fs-title:   18px;   --fw-title:   600;   --lh-title:   1.25;   /* screen / card title */
+  --fs-body:    14px;   --fw-body:    400;   --lh-body:    1.45;   /* descriptions */
+  --fs-label:   11px;   --fw-label:   500;   --lh-label:   1.2;    /* UPPERCASE section headers */
+  --tracking-label: 0.18em;                                        /* tracking-widest */
+  --tracking-wide:  0.08em;
+
+  --fs-data-lg: 28px;   --fw-data-lg: 500;   /* primary metric (mono) */
+  --fs-data-md: 20px;   --fw-data-md: 500;   /* secondary metric (mono) */
+  --fs-data-sm: 12px;   --fw-data-sm: 400;   /* splits, table values (mono) */
+
+  /* Animation */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 0.12s;
+  --duration-base: 0.2s;
+  --duration-slow: 0.28s;
+}
+
+/* ---------- Tokens — LIGHT MODE ----------
+   Inverse: warm gray canvas, pure-white tiles, pure black as the
+   contrast accent. */
+
+:root.light,
+:root[data-theme="light"] {
+  --bg-base:      #EDECEA;
+  --bg-raised:    #F4F3F1;
+  --bg-card:      #FFFFFF;
+  --bg-elevated:  #EAEAE8;
+  --bg-subtle:    #E3E3E1;
+  --bg-drawer:    #CECDCA;
+  --bg-ink:       #FAFAF8;
+
+  --bg-active:        #000000;
+  --bg-active-card:   #1C1C1B;
+  --text-on-active:   #FFFFFF;
+
+  --text-primary:    #0C0C0B;
+  --text-secondary:  #3A3A38;
+  --text-muted:      #6F6F6B;
+  --text-dim:        #A8A8A4;
+  --text-ghost:      #C4C3C0;
+
+  --border:        #D8D8D5;
+  --border-soft:   #E3E3E1;
+}
+
+/* ---------- Semantic typography classes ----------
+   Use these on text elements so the document reads correctly even
+   without inline font/weight specs. */
+
+.t-display {
+  font-family: var(--font-ui);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-display);
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.t-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-title);
+  font-weight: var(--fw-title);
+  line-height: var(--lh-title);
+  color: var(--text-primary);
+}
+
+.t-body {
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+  color: var(--text-primary);
+}
+
+.t-label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-label);
+  line-height: var(--lh-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Data — JetBrains Mono. Numbers are ALWAYS mono in Tactician. */
+.t-data-lg {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-lg);
+  font-weight: var(--fw-data-lg);
+  font-feature-settings: "tnum" on, "ss01" on;
+  color: var(--text-primary);
+}
+.t-data-md {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-md);
+  font-weight: var(--fw-data-md);
+  font-feature-settings: "tnum" on;
+  color: var(--text-primary);
+}
+.t-data-sm {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-sm);
+  font-weight: var(--fw-data-sm);
+  font-feature-settings: "tnum" on;
+  color: var(--text-secondary);
+}
+
+/* Status text helpers */
+.t-status-on-track  { color: var(--status-on-track); }
+.t-status-at-risk   { color: var(--status-at-risk); }
+.t-status-deviating { color: var(--status-deviating); }
+
+/* ---------- Element defaults ----------
+   When you load this file you get reasonable typography for raw
+   tags. UI kits override per-component as needed. */
+
+html, body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 { font: var(--fw-display) var(--fs-display)/var(--lh-display) var(--font-ui); letter-spacing: -0.01em; }
+h2 { font: 600 24px/1.15 var(--font-ui); letter-spacing: -0.005em; }
+h3 { font: var(--fw-title) var(--fs-title)/var(--lh-title) var(--font-ui); }
+h4 { font: 500 14px/1.3 var(--font-ui); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--text-muted); }
+p  { font: var(--fw-body) var(--fs-body)/var(--lh-body) var(--font-ui); color: var(--text-secondary); }
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-data-sm);
+  color: var(--text-primary);
+}

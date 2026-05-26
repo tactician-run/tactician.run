@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tactician — Training execution system for serious runners</title>
+<meta name="description" content="A deterministic, rules-based engine that decides what to change in your training, and why. Built for runners who execute on data, not feel." />
+
+<!-- Design system tokens + fonts -->
+<link rel="stylesheet" href="design-system/colors_and_type.css" />
+<!-- Page styles -->
+<link rel="stylesheet" href="landing.css" />
+
+<!-- React + Babel for embedded iOS app screens -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  /* Tact pulse keyframe used by StatusDot inside the embedded screens */
+  @keyframes tactPulse {
+    0%   { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(3); opacity: 0; }
+  }
+</style>
+<template id="__bundler_thumbnail" data-bg-color="#0D0D0C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0D0D0C"/>
+    <g transform="translate(600 400)">
+      <rect x="-180" y="-180" width="360" height="360" fill="none" stroke="#272725" stroke-width="2"/>
+      <text x="0" y="36" text-anchor="middle"
+            font-family="Inter, system-ui, sans-serif"
+            font-size="220" font-weight="700"
+            fill="#F3F3F2"
+            letter-spacing="-8">T</text>
+    </g>
+    <text x="600" y="700" text-anchor="middle"
+          font-family="ui-monospace, 'JetBrains Mono', monospace"
+          font-size="22" fill="#757570"
+          letter-spacing="6">TACTICIAN</text>
+  </svg>
+</template>
+</head>
+
+<body>
+
+<!-- ─────────────────────────  TOP NAV  ───────────────────────── -->
+<nav class="nav" id="topnav">
+  <div class="container">
+    <a class="nav-brand" href="#top">
+      <span class="glyph" aria-hidden="true"></span>
+      <span>Tactician</span>
+    </a>
+    <div class="nav-meta">
+      <div class="nav-links">
+        <a href="#problem">Problem</a>
+        <a href="#system">System</a>
+        <a href="#how">Flow</a>
+        <a href="#showcase">Product</a>
+        <a href="#founding">Access</a>
+      </div>
+      <a href="#waitlist" class="btn btn-primary">Join Waitlist <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─────────────────────────  HERO  ─────────────────────────── -->
+<header class="section hero" id="top" data-screen-label="01 Hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-status-row reveal">
+          <span class="hero-status">
+            <span class="pulse" aria-hidden="true"></span>
+            <span>Engine · v0.9 · Pre-launch</span>
+          </span>
+          <span class="hero-status" style="color: var(--text-dim);">
+            Vienna HM · WK 8/12 · ACR 1.34
+          </span>
+        </div>
+
+        <h1 class="t-hero reveal" data-delay="1">Stop executing the plan. Start executing the right plan.</h1>
+
+        <p class="t-lede reveal" data-delay="2" style="margin-top: 28px; max-width: 36ch; color: var(--text-primary); font-weight: 500;">
+          Your training plan doesn't know what happened last week. Tactician does.
+        </p>
+
+        <p class="t-lede reveal" data-delay="2" style="margin-top: 16px; max-width: 42ch;">
+          Tactician is a deterministic decision engine that evaluates your training load daily and tells you exactly what to change — and why.
+        </p>
+
+        <div class="hero-cta reveal" data-delay="3">
+          <a href="#waitlist" class="btn btn-primary">
+            Join Founding Athlete Waitlist
+            <span class="arrow">→</span>
+          </a>
+          <a href="#system" class="btn btn-secondary">
+            See How It Works
+          </a>
+        </div>
+
+        <div class="hero-mini reveal" data-delay="4">
+          <span>Limited founding access</span>
+          <span class="sep">·</span>
+          <span>iOS first</span>
+        </div>
+      </div>
+
+      <!-- Hero directive card — replaces the phone stack with immediate product proof -->
+      <div class="hero-visual reveal" data-delay="2">
+        <aside class="directive-card" aria-label="Sample directive output" style="background-color: rgb(35, 35, 31)">
+          <div class="dc-head">
+            <span class="lbl">Directive · Today</span>
+            <span class="dim">Mon 19 May</span>
+          </div>
+          <div class="dc-eye">Action</div>
+          <div class="dc-word" style="font-size: 50px">REDUCE</div>
+          <div class="dc-workout">
+            <span class="k">Workout</span>
+            <span class="v">Long run · 18mi planned</span>
+          </div>
+          <div class="dc-rationale">
+            <p>Load ceiling breach detected.</p>
+            <p>Acute load <span class="num">1.34</span> · ceiling <span class="num">1.50</span>.</p>
+            <p class="action">Drop to 12mi, Zone 2 only.</p>
+          </div>
+          <ul class="dc-fired">
+            <li><span class="dot" aria-hidden="true"></span> <span class="tag">FIRED</span> <span>Intensity Stack Protect</span></li>
+            <li><span class="dot" aria-hidden="true"></span> <span class="tag">FIRED</span> <span>ACR Ceiling Breach</span></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────────────────────  POSITIONING / STATS  ───────────────────────── -->
+<section class="section positioning" data-screen-label="02 Positioning">
+  <div class="container">
+    <div class="positioning-grid">
+      <div class="positioning-headline reveal">
+        Built for runners who execute on data, not feel.
+      </div>
+      <div class="positioning-stat reveal" data-delay="1">
+        <span class="v">100</span>
+        <span class="k">Founding seats</span>
+      </div>
+      <div class="positioning-stat reveal" data-delay="2">
+        <span class="v">28<span style="color: var(--text-dim);">d</span></span>
+        <span class="k">Adaptive horizon</span>
+      </div>
+      <div class="positioning-stat reveal" data-delay="3">
+        <span class="v">0</span>
+        <span class="k">Cookie-cutter plans</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  PROBLEM  ─────────────────────────── -->
+<section class="section" id="problem" data-screen-label="03 Problem">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="t-eyebrow"><span class="dot"></span> Problem · 01</span>
+      <h2 class="t-section-head" style="margin-top: 24px;">
+        Static training plans break when life happens.
+      </h2>
+      <p class="t-lede lede">
+        Every plan assumes perfect adherence, perfect recovery, perfect weeks. The first time you miss a session — or push too hard — the rest of the block is wrong, and you're guessing.
+      </p>
+    </div>
+
+    <div class="problem-grid">
+      <ul class="problem-list reveal">
+        <li>
+          <span class="num">01</span>
+          <span class="what">Missed workouts cascade into <em>broken weeks</em>.</span>
+          <span class="tag">Adherence</span>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <span class="what">Fatigue accumulates silently. The ceiling stays hidden.</span>
+          <span class="tag">Load</span>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <span class="what">Recovery is inconsistent, but the plan isn't.</span>
+          <span class="tag">Rigidity</span>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <span class="what">No decision support on the days that matter.</span>
+          <span class="tag">Judgement</span>
+        </li>
+        <li>
+          <span class="num">05</span>
+          <span class="what">Race day arrives — and you don't know if you're ready.</span>
+          <span class="tag">Confidence</span>
+        </li>
+      </ul>
+
+      <div class="problem-aside reveal" data-delay="1">
+        <div class="problem-card">
+          <div class="label-row">
+            <span class="t-eyebrow" style="font-size: 10px;"><span class="dot" style="background: var(--status-deviating);"></span> Static plan · drift</span>
+            <span class="mono" style="font-size: 11px; letter-spacing: 0.18em; color: var(--text-dim);">WK 1 → 12</span>
+          </div>
+          <div class="problem-chart">
+            <div class="pc-axis">
+              <span class="pc-axis-label planned">PLANNED</span>
+              <span class="pc-axis-label actual">ACTUAL · −22%</span>
+            </div>
+            <svg viewBox="0 0 220 130" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="devGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#D42B25" stop-opacity="0.16"/>
+                  <stop offset="100%" stop-color="#D42B25" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- planned line (dashed) -->
+              <path d="M0 100 L40 88 L80 76 L120 64 L160 52 L200 40 L220 36"
+                    fill="none" stroke="#A8A8A4" stroke-width="1.2" stroke-dasharray="3 3"/>
+              <!-- actual line (jaggier, drifts below) -->
+              <path d="M0 100 L20 96 L40 92 L60 102 L80 98 L100 110 L120 104 L140 116 L160 110 L180 122 L200 116 L220 124"
+                    fill="none" stroke="#D42B25" stroke-width="1.5"/>
+              <path d="M0 100 L20 96 L40 92 L60 102 L80 98 L100 110 L120 104 L140 116 L160 110 L180 122 L200 116 L220 124 L220 130 L0 130 Z"
+                    fill="url(#devGrad)"/>
+            </svg>
+          </div>
+          <div class="caption">
+            By week 8, actual fitness diverges from the plan by <strong>22%</strong>. No correction. No alert. No adjustment.
+          </div>
+        </div>
+
+        <div class="problem-card" style="background: #060605; color: #F3F3F2; border-color: #2E2E2A;">
+          <div class="label-row">
+            <span class="mono" style="font-size: 10px; letter-spacing: 0.22em; color: var(--text-muted); text-transform: uppercase;">Familiar?</span>
+          </div>
+          <div style="font-family: var(--font-ui); font-size: 16px; line-height: 1.5; color: #C1C1BE;">
+            "I missed Tuesday. Should I move Tuesday's workout to today, or skip it? Will it cost me the race?"
+          </div>
+          <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; color: #757570; text-transform: uppercase;">
+            Every runner · every block
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  SOLUTION / FEATURES  ─────────────────────────── -->
+<section class="section" id="system" data-screen-label="04 System">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="t-eyebrow"><span class="dot"></span> System · 02</span>
+      <h2 class="t-section-head" style="margin-top: 24px;">A decision engine. Five subsystems. One directive per day.</h2>
+      <p class="t-lede lede">Five subsystems running every day on your real training behavior. Deterministic. Auditable. Every directive shows its work.</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <!-- Feature 01: Daily Decision Output -->
+      <div class="feature">
+        <div class="index">01 · Engine</div>
+        <h3>Daily Decision Output</h3>
+        <p>Tomorrow's session reflects today's reality. Tactician reads completed workouts, flags intensity stacking, and rewrites the prescription before you lace up.</p>
+        <div class="frag">
+          <div class="frag-pills">
+            <span class="frag-pill on">Proceed</span>
+            <span class="frag-pill warn">Modify</span>
+            <span class="frag-pill warn">Reduce</span>
+            <span class="frag-pill">Rest</span>
+            <span class="frag-pill on">Push</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 02: Fatigue & Load Engine -->
+      <div class="feature">
+        <div class="index">02 · Load</div>
+        <h3>Fatigue &amp; Load Engine</h3>
+        <p>ACR, monotony, hard-session density. The numbers you'd compute on paper, on every workout.</p>
+        <div class="frag">
+          <div class="frag-gauge">
+            <span class="v">1.34</span>
+            <span class="u">ACR · CEILING 1.50</span>
+          </div>
+          <div class="frag-bar"><i style="width: 89%;"></i></div>
+        </div>
+      </div>
+
+      <!-- Feature 03: Race Fitness Projection -->
+      <div class="feature">
+        <div class="index">03 · Trajectory</div>
+        <h3>Race Fitness Projection</h3>
+        <p>The trajectory of your actual fitness against the trajectory required to hit your target time. Adjustments compound.</p>
+        <div class="frag">
+          <div class="frag-sparkline-wrap">
+            <svg class="frag-sparkline" viewBox="0 0 400 90" preserveAspectRatio="xMidYMid meet">
+              <!-- planned baseline -->
+              <path class="plan-line"
+                    d="M0 70 L40 64 L80 60 L120 54 L160 48 L200 44 L240 38 L280 32 L320 26 L360 20 L400 14"/>
+              <!-- actual fitness -->
+              <path class="actual-line"
+                    d="M0 70 L40 66 L80 58 L120 56 L160 50 L200 42 L240 38 L280 30 L320 24 L360 18 L400 12"/>
+              <circle cx="200" cy="42" r="3.5" fill="var(--text-primary)"/>
+              <circle cx="400" cy="12" r="3.5" fill="var(--status-at-risk)"/>
+            </svg>
+            <span class="pin now">NOW</span>
+            <span class="pin race">RACE</span>
+          </div>
+          <div class="frag-sparkline-legend">
+            <span><span class="swatch actual"></span>Actual</span>
+            <span><span class="swatch plan"></span>Baseline</span>
+          </div>
+          <div class="frag-rules" style="margin-top: 20px;">
+            <div class="row"><span class="k">Target</span><span class="v">1:32:00</span></div>
+            <div class="row"><span class="k">Projection</span><span class="v">1:33:18</span></div>
+            <div class="row"><span class="k">Confidence</span><span class="v">68%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 04: Decision Engine -->
+      <div class="feature">
+        <div class="index">04 · Decisions</div>
+        <h3>Training Decision Engine</h3>
+        <p>Every day, one screen: what to do, why, and what changes if you defer. Tactician ships its trace — you can audit every directive.</p>
+        <div class="frag">
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 10px; align-items: baseline;">
+              <span class="mono" style="font-size: 10px; color: var(--status-deviating); letter-spacing: 0.22em;">● FIRED</span>
+              <span style="font-family: var(--font-ui); font-size: 14px; color: var(--text-primary);">Intensity Stack Protect</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: baseline;">
+              <span class="mono" style="font-size: 10px; color: var(--status-deviating); letter-spacing: 0.22em;">● FIRED</span>
+              <span style="font-family: var(--font-ui); font-size: 14px; color: var(--text-primary);">ACR Ceiling Breach</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: baseline;">
+              <span class="mono" style="font-size: 10px; color: var(--text-muted); letter-spacing: 0.22em;">○ OK</span>
+              <span style="font-family: var(--font-ui); font-size: 14px; color: var(--text-muted);">Long-run quota</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: baseline;">
+              <span class="mono" style="font-size: 10px; color: var(--text-primary); letter-spacing: 0.22em;">■ ACTION</span>
+              <span style="font-family: var(--font-ui); font-size: 14px; color: var(--text-primary);">Recovery run · 40min · Z1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  HOW IT WORKS  ─────────────────────────── -->
+<section class="section ink" id="how" data-screen-label="05 How It Works"
+         style="background: var(--bg-base); color: var(--text-primary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="t-eyebrow"><span class="dot"></span> Flow · 03</span>
+      <h2 class="t-section-head" style="margin-top: 24px;">
+        Three inputs. One adaptive system.
+      </h2>
+      <p class="t-lede lede">
+        No onboarding maze. No daily check-ins. Connect once, train normally — Tactician handles the rest.
+      </p>
+    </div>
+
+    <div class="how-grid">
+      <div class="how-step reveal">
+        <div class="step-num"><span>STEP · 01</span><span>INPUT</span></div>
+        <h4>Set your goals and training profile.</h4>
+        <p>Race date. Target time. Weekly volume. Tactician builds your base block in under two minutes.</p>
+        <div class="step-block">
+          <div class="sb-head"><span>Profile · Build</span><span>2 MIN</span></div>
+          <div class="sb-row"><span class="k">Goal race</span><span class="v">Vienna HM</span></div>
+          <div class="sb-row"><span class="k">Race date</span><span class="v">2026-10-05</span></div>
+          <div class="sb-row"><span class="k">Target time</span><span class="v">1:32:00</span></div>
+          <div class="sb-row"><span class="k">Weekly volume</span><span class="v">50–60 km</span></div>
+          <div class="sb-row"><span class="k">Phase</span><span class="v">Build · WK 8/12</span></div>
+        </div>
+      </div>
+
+      <div class="how-step reveal" data-delay="1">
+        <div class="step-num"><span>STEP · 02</span><span>TRACK</span></div>
+        <h4>Track progression and readiness.</h4>
+        <p>Strava syncs in the background. Every completed workout updates trajectory, fatigue, and the friction signals that gate the next session.</p>
+        <div class="step-block">
+          <div class="sb-head"><span>Load · 28D</span><span>SYNCED 06:14</span></div>
+          <div class="sb-chart">
+            <svg viewBox="0 0 280 80" preserveAspectRatio="none">
+              <line x1="0" y1="22" x2="280" y2="22" stroke="#FFAA00" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.7"/>
+              <path d="M0 64 L28 60 L56 58 L84 52 L112 48 L140 40 L168 36 L196 30 L224 26 L252 22 L280 18"
+                    fill="none" stroke="#A8A8A4" stroke-width="1" stroke-dasharray="3 3"/>
+              <path d="M0 68 L28 62 L56 56 L84 50 L112 42 L140 36 L168 30 L196 26 L224 22 L252 20 L280 18"
+                    fill="none" stroke="#F3F3F2" stroke-width="1.5"/>
+              <circle cx="280" cy="18" r="3" fill="#FFAA00"/>
+            </svg>
+          </div>
+          <div class="sb-row"><span class="k">Acute 7d</span><span class="v warn">58.2 km</span></div>
+          <div class="sb-row"><span class="k">Chronic 28d</span><span class="v">43.4 km</span></div>
+          <div class="sb-row"><span class="k">ACR</span><span class="v warn">1.34 / 1.50</span></div>
+        </div>
+      </div>
+
+      <div class="how-step reveal" data-delay="2">
+        <div class="step-num"><span>STEP · 03</span><span>DECIDE</span></div>
+        <h4>Receive your directive. Execute or override.</h4>
+        <p>One directive per day. With rationale, alternatives considered, and the impact of deferring. You choose to execute or override.</p>
+        <div class="step-block">
+          <div class="sb-head"><span>Directive · Today</span><span>MON 19 MAY</span></div>
+          <div class="sb-directive-eye">Action</div>
+          <div class="sb-directive-word">REDUCE</div>
+          <div class="sb-row"><span class="k">Long run</span><span class="v">18mi → 12mi</span></div>
+          <div class="sb-row"><span class="k">Zone</span><span class="v">Z2 only</span></div>
+          <div class="sb-rationale">
+            Load ceiling breach. Acute 1.34, ceiling 1.50. Two rules fired.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  PRODUCT SHOWCASE  ─────────────────────────── -->
+<section class="section ink showcase" id="showcase" data-screen-label="06 Product">
+  <div class="container">
+    <div class="sec-head reveal" style="max-width: 100%;">
+      <span class="t-eyebrow" style="color: var(--text-muted);"><span class="dot"></span> Product · 04</span>
+      <h2 class="t-section-head" style="margin-top: 24px; color: #F3F3F2; max-width: 24ch;">
+        Built like a flight deck. Not a feed.
+      </h2>
+    </div>
+
+    <!-- React-driven coded carousel mounts here -->
+    <div class="cx-shell reveal" id="carousel-root"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  FOUNDING ATHLETE OFFER  ─────────────────────────── -->
+<section class="section ink" id="founding" data-screen-label="07 Founding">
+  <div class="container">
+    <div class="offer-wrap">
+      <div class="offer-left reveal">
+        <span class="t-eyebrow"><span class="dot"></span> Founding access · 05</span>
+        <h2>Become a Founding Athlete.</h2>
+        <p class="t-lede lede">Get early access. Lock in founding pricing. Permanently.</p>
+
+        <ul class="offer-benefits">
+          <li>
+            <span class="ix">01</span>
+            <span class="label">Early access to the iOS beta</span>
+            <span class="meta">Within 14 days</span>
+          </li>
+          <li>
+            <span class="ix">02</span>
+            <span class="label">Direct feedback channel</span>
+            <span class="meta">Founders · Slack</span>
+          </li>
+          <li>
+            <span class="ix">03</span>
+            <span class="label">Locked founding pricing</span>
+            <span class="meta">Forever</span>
+          </li>
+          <li>
+            <span class="ix">04</span>
+            <span class="label">First access to phase modules</span>
+            <span class="meta">Marathon · Ultra</span>
+          </li>
+        </ul>
+      </div>
+
+      <aside class="offer-card reveal" data-delay="1">
+        <div class="status-row">
+          <span class="live">Founding · open</span>
+          <span class="count" id="seat-count">23 / 100 claimed</span>
+        </div>
+
+        <div class="founding-rate">
+          <div class="fr-eye">Founding rate</div>
+          <div class="fr-headline">Locked forever at launch price.</div>
+          <ul class="fr-list">
+            <li><span class="k">Plans</span><span class="v">Monthly · Annual</span></li>
+            <li><span class="k">Lock</span><span class="v">Founding rate · forever</span></li>
+            <li><span class="k">Price</span><span class="v">Confirmed at launch</span></li>
+          </ul>
+        </div>
+
+        <a href="#waitlist" class="btn btn-primary offer-cta">
+          <span>Join Waitlist</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <div class="offer-foot">
+          <span>Seats</span>
+          <span class="bar"><i></i></span>
+          <span class="mono" style="color: var(--text-primary);">23 / 100</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────  FINAL CTA  ─────────────────────────── -->
+<section class="section final" id="waitlist" data-screen-label="08 Waitlist">
+  <div class="container">
+    <div class="final-head reveal">
+      <span class="t-eyebrow"><span class="dot"></span> Waitlist · 06</span>
+      <h2 class="t-section-head" style="margin-top: 24px;">The plan is a baseline. Tactician decides the rest.</h2>
+      <p class="t-lede lede" style="max-width: 52ch;">
+        Join the waitlist for early access to Tactician. We'll send a single email when your seat opens.
+      </p>
+    </div>
+
+    <form class="final-form reveal" data-delay="1" id="waitlist-form" autocomplete="off">
+      <div class="field">
+        <label for="f-name"><span>Name</span><span class="req">*</span></label>
+        <input id="f-name" name="name" type="text" placeholder="Alex Morgan" required />
+      </div>
+      <div class="field">
+        <label for="f-email"><span>Email</span><span class="req">*</span></label>
+        <input id="f-email" name="email" type="email" placeholder="alex@example.com" required />
+      </div>
+      <div class="field">
+        <label for="f-race"><span>Goal race</span><span class="opt">optional</span></label>
+        <input id="f-race" name="race" type="text" placeholder="Vienna Half Marathon · Oct 2026" />
+      </div>
+      <div class="field">
+        <label for="f-time"><span>Target time</span><span class="opt">optional</span></label>
+        <input id="f-time" name="target" type="text" class="mono" placeholder="1:32:00" />
+      </div>
+      <div class="final-submit">
+        <div class="pact">
+          One email when your seat opens. No newsletters. No drip campaign.<br/>
+          By joining you agree to the Privacy Notice.
+        </div>
+        <button type="submit" id="waitlist-submit">
+          <span>Join Waitlist</span>
+          <span class="arrow mono">→</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ─────────────────────────  FOOTER  ─────────────────────────── -->
+<footer class="foot">
+  <div class="container">
+    <div class="brandblock">
+      <div class="wordmark">Tactician</div>
+      <div class="tag">Training execution engine · Built for runners · 2026</div>
+    </div>
+    <div class="foot-links">
+      <a href="#" id="contact-link">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <div class="foot-meta">
+      <span>v0.9.4 · build a8e2</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ─────────────────────────  APP CODE  ─────────────────────────── -->
+<!-- iOS device frame, design system tokens, and Tactician app screens -->
+<script type="text/babel" src="design-system/ios-frame.jsx"></script>
+<script type="text/babel" src="design-system/Tokens.jsx"></script>
+<script type="text/babel" src="design-system/CommandScreen.jsx"></script>
+<script type="text/babel" src="design-system/TrajectoryScreen.jsx"></script>
+<!-- Landing page screen mounts -->
+<script type="text/babel" src="landing-screens.jsx"></script>
+<!-- Coded carousel for the product showcase -->
+<script type="text/babel" src="showcase-carousel.jsx"></script>
+
+<!-- ── Contact modal ───────────────────────────── -->
+<div id="contact-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Contact">
+  <div class="modal-card">
+    <button class="modal-close" id="contact-close" aria-label="Close contact modal">×</button>
+    <div class="modal-label">Contact</div>
+    <p class="modal-body">For questions about Tactician or the waitlist, reach out directly.</p>
+    <a href="mailto:hello@tactician.run" class="modal-email">hello@tactician.run</a>
+  </div>
+</div>
+
+<script>
+  // ── Nav scroll state
+  const nav = document.getElementById('topnav');
+  const onScroll = () => {
+    if (window.scrollY > 12) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ── Smooth scroll for jump links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (ev) => {
+      const id = a.getAttribute('href').slice(1);
+      const tgt = document.getElementById(id);
+      if (!tgt) return;
+      ev.preventDefault();
+      const top = tgt.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+
+  // ── Active section highlight for top-nav links
+  const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
+  const navTargets = navLinks
+    .map(a => ({ a, sec: document.getElementById(a.getAttribute('href').slice(1)) }))
+    .filter(x => x.sec);
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const link = navTargets.find(t => t.sec === e.target)?.a;
+      if (!link) return;
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  navTargets.forEach(t => sectionObserver.observe(t.sec));
+
+  // ── Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ── Waitlist form: prevent default + flash success state
+  const form = document.getElementById('waitlist-form');
+  const btn = document.getElementById('waitlist-submit');
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    btn.disabled = true;
+    btn.innerHTML = '<span>Seat reserved · check email</span><span class="arrow mono">✓</span>';
+  });
+
+  // ── Contact modal
+  (function () {
+    const overlay   = document.getElementById('contact-modal');
+    const openBtn   = document.getElementById('contact-link');
+    const closeBtn  = document.getElementById('contact-close');
+    if (!overlay || !openBtn) return;
+
+    function openModal()  {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
+  })();
+</script>
+
+</body>
+</html>

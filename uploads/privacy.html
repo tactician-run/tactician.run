@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Notice — Tactician</title>
+  <style>
+    :root {
+      --bg-base: #0D0D0C;
+      --bg-surface: #141413;
+      --text-primary: #F3F3F2;
+      --text-secondary: #8A8A85;
+      --accent: #FFAA00;
+      --border: #2A2A28;
+      --font-ui: 'Georgia', serif;
+      --font-mono: 'Courier New', 'Courier', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      padding: 24px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wordmark {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .wordmark:hover { color: var(--accent); }
+
+    /* MAIN */
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 64px 40px 96px;
+    }
+
+    .page-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+      margin-bottom: 48px;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.75;
+    }
+
+    p + p {
+      margin-top: 12px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 20px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer { padding: 20px 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://tactician.run" class="wordmark">Tactician</a>
+  </nav>
+
+  <main>
+    <div class="page-label">Legal</div>
+    <h1>Privacy Notice</h1>
+    <div class="meta">Last updated: May 2026</div>
+
+    <section>
+      <div class="section-label">What We Collect</div>
+      <p>When you join the waitlist, we collect your name, email address, and optionally your goal race and target finish time. That's it.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Why</div>
+      <p>To manage the waitlist and contact you about Tactician's launch. We will not email you for any other purpose.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Who Sees It</div>
+      <p>Your data is processed by <a href="https://loops.so" target="_blank" rel="noopener">Loops</a> (our email service provider, US-based) and stored on servers provided by Vercel (our hosting provider). No one else has access to your information. We do not sell, share, or transfer your data to any third party for any purpose.</p>
+      <p>There are no tracking pixels or analytics on this site. Vercel may set minimal functional cookies to serve the page. We set none ourselves.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Legal Basis</div>
+      <p>We rely on legitimate interest and your consent at the point of signup. Submitting the form is your affirmative action. You can withdraw at any time.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Retention</div>
+      <p>We hold your data until Tactician launches or until you unsubscribe — whichever comes first. If you request deletion, we will remove your record within 30 days.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Your Rights</div>
+      <p>Under GDPR and applicable law, you have the right to access, correct, or delete the personal data we hold about you. To exercise any of these rights, email us at <a href="mailto:hello@tactician.run">hello@tactician.run</a>. We will respond within 30 days.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Contact</div>
+      <p>Questions about this notice: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-links">
+      <a href="https://tactician.run">← tactician.run</a>
+      <a href="/terms.html">Terms of Use</a>
+    </div>
+    <span class="footer-copy">© 2026 Tactician</span>
+  </footer>
+
+</body>
+</html>

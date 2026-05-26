@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terms of Use — Tactician</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="design-system/colors_and_type.css" />
+  <link rel="stylesheet" href="landing.css" />
+  <style>
+    /* Legal page layout — extends landing.css */
+    .legal-nav {
+      padding: 0 var(--gutter);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-nav .nav-brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--font-ui);
+      font-size: 17px; font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .legal-nav .nav-brand .glyph {
+      width: 22px; height: 22px;
+      border: 1px solid currentColor;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .legal-nav .nav-brand .glyph::after {
+      content: "";
+      width: 7px; height: 7px; background: currentColor;
+    }
+    .legal-main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(48px, 6vw, 80px) var(--gutter) clamp(80px, 10vw, 120px);
+    }
+    .legal-page-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .legal-page-label .dot {
+      width: 5px; height: 5px; background: var(--text-muted); border-radius: 999px;
+    }
+    .legal-h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .legal-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 56px;
+    }
+    .legal-section {
+      margin-bottom: 40px;
+    }
+    .legal-section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-section p {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .legal-section p + p { margin-top: 12px; }
+    .legal-section a {
+      color: var(--status-at-risk);
+      text-decoration: none;
+    }
+    .legal-section a:hover { text-decoration: underline; }
+    .legal-foot {
+      border-top: 1px solid var(--border);
+      padding: clamp(24px, 3vw, 40px) var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .legal-foot-links {
+      display: flex; gap: 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .legal-foot-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .legal-foot-links a:hover { color: var(--text-primary); }
+    .legal-foot-links a.current { color: var(--text-dim); pointer-events: none; }
+    .legal-foot-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="legal-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="glyph" aria-hidden="true"></span>
+      <span>Tactician</span>
+    </a>
+  </nav>
+
+  <main class="legal-main">
+    <div class="legal-page-label"><span class="dot"></span> Legal</div>
+    <h1 class="legal-h1">Terms of Use</h1>
+    <div class="legal-meta">Last updated · May 2026</div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">What This Site Is</div>
+      <p>tactician.run is a pre-launch information and waitlist site. No product is currently available for purchase or download. Joining the waitlist is an expression of interest — it creates no contractual obligation on your part or ours.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Pricing</div>
+      <p>Any pricing shown on this site is indicative only. It is not a binding offer. Pricing will be confirmed at the time of launch, and any purchase agreement will be governed by separate terms issued at that time.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Content</div>
+      <p>All content on this site — including text, branding, and product descriptions — is owned by Tactician. You may not reproduce or redistribute any part of it without written permission.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Availability</div>
+      <p>This site is provided as-is. We make no guarantees about uptime, accuracy, or continuity. We may change or remove content at any time without notice.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Governing Law</div>
+      <p>These terms are governed by the laws of Portugal. Any disputes will be subject to the exclusive jurisdiction of the Portuguese courts.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Contact</div>
+      <p>Questions: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
+    </div>
+  </main>
+
+  <footer class="legal-foot">
+    <div class="legal-foot-links">
+      <a href="index.html">← tactician.run</a>
+      <a href="privacy.html">Privacy Notice</a>
+      <a class="current" aria-current="page">Terms of Use</a>
+    </div>
+    <span class="legal-foot-copy">© 2026 Tactician</span>
+  </footer>
+
+</body>
+</html>

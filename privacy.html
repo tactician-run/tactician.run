@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Notice — Tactician</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="design-system/colors_and_type.css" />
+  <link rel="stylesheet" href="landing.css" />
+  <style>
+    /* Legal page layout — extends landing.css */
+    .legal-nav {
+      padding: 0 var(--gutter);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-nav .nav-brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--font-ui);
+      font-size: 17px; font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .legal-nav .nav-brand .glyph {
+      width: 22px; height: 22px;
+      border: 1px solid currentColor;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .legal-nav .nav-brand .glyph::after {
+      content: "";
+      width: 7px; height: 7px; background: currentColor;
+    }
+    .legal-main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(48px, 6vw, 80px) var(--gutter) clamp(80px, 10vw, 120px);
+    }
+    .legal-page-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .legal-page-label .dot {
+      width: 5px; height: 5px; background: var(--text-muted); border-radius: 999px;
+    }
+    .legal-h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .legal-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 56px;
+    }
+    .legal-section {
+      margin-bottom: 40px;
+    }
+    .legal-section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-section p {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .legal-section p + p { margin-top: 12px; }
+    .legal-section a {
+      color: var(--status-at-risk);
+      text-decoration: none;
+    }
+    .legal-section a:hover { text-decoration: underline; }
+    .legal-foot {
+      border-top: 1px solid var(--border);
+      padding: clamp(24px, 3vw, 40px) var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .legal-foot-links {
+      display: flex; gap: 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .legal-foot-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .legal-foot-links a:hover { color: var(--text-primary); }
+    .legal-foot-links a.current { color: var(--text-dim); pointer-events: none; }
+    .legal-foot-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="legal-nav">
+    <a href="index.html" class="nav-brand">
+      <span class="glyph" aria-hidden="true"></span>
+      <span>Tactician</span>
+    </a>
+  </nav>
+
+  <main class="legal-main">
+    <div class="legal-page-label"><span class="dot"></span> Legal</div>
+    <h1 class="legal-h1">Privacy Notice</h1>
+    <div class="legal-meta">Last updated · May 2026</div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">What We Collect</div>
+      <p>When you join the waitlist, we collect your name, email address, and optionally your goal race and target finish time. That's it.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Why</div>
+      <p>To manage the waitlist and contact you about Tactician's launch. We will not email you for any other purpose.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Who Sees It</div>
+      <p>Your data is processed by <a href="https://loops.so" target="_blank" rel="noopener">Loops</a> (our email service provider, US-based) and stored on servers provided by Vercel (our hosting provider). No one else has access to your information. We do not sell, share, or transfer your data to any third party for any purpose.</p>
+      <p>There are no tracking pixels or analytics on this site. Vercel may set minimal functional cookies to serve the page. We set none ourselves.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Legal Basis</div>
+      <p>We rely on legitimate interest and your consent at the point of signup. Submitting the form is your affirmative action. You can withdraw at any time.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Retention</div>
+      <p>We hold your data until Tactician launches or until you unsubscribe — whichever comes first. If you request deletion, we will remove your record within 30 days.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Your Rights</div>
+      <p>Under GDPR and applicable law, you have the right to access, correct, or delete the personal data we hold about you. To exercise any of these rights, email us at <a href="mailto:hello@tactician.run">hello@tactician.run</a>. We will respond within 30 days.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Contact</div>
+      <p>Questions about this notice: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
+    </div>
+  </main>
+
+  <footer class="legal-foot">
+    <div class="legal-foot-links">
+      <a href="index.html">← tactician.run</a>
+      <a class="current" aria-current="page">Privacy Notice</a>
+      <a href="terms.html">Terms of Use</a>
+    </div>
+    <span class="legal-foot-copy">© 2026 Tactician</span>
+  </footer>
+
+</body>
+</html>
