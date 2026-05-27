@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 1024 1024">
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+      }
+
+      .st1 {
+        display: none;
+      }
+    </style>
+  </defs>
+  <rect width="1024" height="1024"/>
+  <rect class="st0" x="422.9" y="422.9" width="178.2" height="178.2"/>
+  <path class="st0" d="M237.9,237.9v548.3h548.3V237.9H237.9ZM759.7,759.7h-495.4v-495.4h495.4v495.4Z"/>
+</svg>

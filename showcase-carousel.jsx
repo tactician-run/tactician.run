@@ -133,7 +133,7 @@
         </div>
         <div className="scr-traj-body">
           <div className="scr-traj-phases">
-            <div className="past"><i className="bar"></i><span>BASE</span></div>
+            <div className="on"><i className="bar"></i><span>BASE</span></div>
             <div className="on"><i className="bar"></i><span>BUILD</span></div>
             <div><i className="bar"></i><span>PEAK</span></div>
             <div><i className="bar"></i><span>TAPER</span></div>

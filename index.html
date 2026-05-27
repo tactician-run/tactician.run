@@ -6,6 +6,8 @@
 <title>Tactician — Training execution system for serious runners</title>
 <meta name="description" content="A deterministic, rules-based engine that decides what to change in your training, and why. Built for runners who execute on data, not feel." />
 
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
 <!-- Design system tokens + fonts -->
 <link rel="stylesheet" href="design-system/colors_and_type.css" />
 <!-- Page styles -->
@@ -298,12 +300,12 @@
             <svg class="frag-sparkline" viewBox="0 0 400 90" preserveAspectRatio="xMidYMid meet">
               <!-- planned baseline -->
               <path class="plan-line"
-                    d="M0 70 L40 64 L80 60 L120 54 L160 48 L200 44 L240 38 L280 32 L320 26 L360 20 L400 14"/>
+                    d="M0 72 L40 64 L80 56 L120 48 L160 40 L200 32 L240 24 L280 18 L320 14 L360 10 L400 8"/>
               <!-- actual fitness -->
               <path class="actual-line"
-                    d="M0 70 L40 66 L80 58 L120 56 L160 50 L200 42 L240 38 L280 30 L320 24 L360 18 L400 12"/>
-              <circle cx="200" cy="42" r="3.5" fill="var(--text-primary)"/>
-              <circle cx="400" cy="12" r="3.5" fill="var(--status-at-risk)"/>
+                    d="M0 72 L40 68 L80 62 L120 60 L160 56 L200 52 L240 50 L280 48 L320 46 L360 44 L400 42"/>
+              <circle cx="200" cy="52" r="3.5" fill="var(--text-primary)"/>
+              <circle cx="400" cy="42" r="3.5" fill="var(--status-at-risk)"/>
             </svg>
             <span class="pin now">NOW</span>
             <span class="pin race">RACE</span>
@@ -314,8 +316,8 @@
           </div>
           <div class="frag-rules" style="margin-top: 20px;">
             <div class="row"><span class="k">Target</span><span class="v">1:32:00</span></div>
-            <div class="row"><span class="k">Projection</span><span class="v">1:33:18</span></div>
-            <div class="row"><span class="k">Confidence</span><span class="v">68%</span></div>
+            <div class="row"><span class="k">Projection</span><span class="v">1:36:30</span></div>
+            <div class="row"><span class="k">Confidence</span><span class="v">52%</span></div>
           </div>
         </div>
       </div>
@@ -461,11 +463,6 @@
             <span class="label">Locked founding pricing</span>
             <span class="meta">Forever</span>
           </li>
-          <li>
-            <span class="ix">04</span>
-            <span class="label">First access to phase modules</span>
-            <span class="meta">Marathon · Ultra</span>
-          </li>
         </ul>
       </div>
 
@@ -492,8 +489,8 @@
 
         <div class="offer-foot">
           <span>Seats</span>
-          <span class="bar"><i></i></span>
-          <span class="mono" style="color: var(--text-primary);">23 / 100</span>
+          <span class="bar"><i id="offer-bar-fill"></i></span>
+          <span class="mono" id="offer-foot-count" style="color: var(--text-primary);">23 / 100</span>
         </div>
       </aside>
     </div>
@@ -507,8 +504,12 @@
       <span class="t-eyebrow"><span class="dot"></span> Waitlist · 06</span>
       <h2 class="t-section-head" style="margin-top: 24px;">The plan is a baseline. Tactician decides the rest.</h2>
       <p class="t-lede lede" style="max-width: 52ch;">
-        Join the waitlist for early access to Tactician. We'll send a single email when your seat opens.
+        Join the waitlist for early access to Tactician. A few emails before launch. No noise after.
       </p>
+      <div id="seats-status-row" style="display:none; margin-top: 24px; align-items: center; gap: 10px;" aria-live="polite">
+        <span style="width:6px;height:6px;border-radius:999px;background:var(--status-on-track);flex-shrink:0;display:block;"></span>
+        <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);"><span id="seats-claimed-count" style="color:var(--text-primary);">—</span>&thinsp;of 100 founding athlete seats claimed</span>
+      </div>
     </div>
 
     <form class="final-form reveal" data-delay="1" id="waitlist-form" autocomplete="off">
@@ -525,12 +526,18 @@
         <input id="f-race" name="race" type="text" placeholder="Vienna Half Marathon · Oct 2026" />
       </div>
       <div class="field">
-        <label for="f-time"><span>Target time</span><span class="opt">optional</span></label>
-        <input id="f-time" name="target" type="text" class="mono" placeholder="1:32:00" />
+        <label for="f-level"><span>Experience level</span><span class="opt">optional</span></label>
+        <select id="f-level" name="level">
+          <option value="" disabled selected></option>
+          <option value="just-serious">Just getting serious</option>
+          <option value="self-coached">Self-coached, structured</option>
+          <option value="build-plans">I build my own plans</option>
+          <option value="with-coach">Working with a coach</option>
+        </select>
       </div>
+      <div class="form-error-row" id="waitlist-error-bar" role="alert" style="display:none;"></div>
       <div class="final-submit">
         <div class="pact">
-          One email when your seat opens. No newsletters. No drip campaign.<br/>
           By joining you agree to the Privacy Notice.
         </div>
         <button type="submit" id="waitlist-submit">
@@ -539,6 +546,13 @@
         </button>
       </div>
     </form>
+
+    <div class="form-success" id="waitlist-success" style="display:none;" aria-live="polite">
+      <div class="fs-label">Seat reserved</div>
+      <div class="fs-head">You're in.</div>
+      <p class="fs-body">Check your email — we'll reach out with early access details before launch.</p>
+      <div class="fs-meta">A few emails before launch · No noise after</div>
+    </div>
   </div>
 </section>
 
@@ -551,8 +565,8 @@
     </div>
     <div class="foot-links">
       <a href="#" id="contact-link">Contact</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="terms.html">Terms</a>
+      <a href="#" id="privacy-link">Privacy</a>
+      <a href="#" id="terms-link">Terms</a>
     </div>
     <div class="foot-meta">
       <span>v0.9.4 · build a8e2</span>
@@ -578,6 +592,83 @@
     <div class="modal-label">Contact</div>
     <p class="modal-body">For questions about Tactician or the waitlist, reach out directly.</p>
     <a href="mailto:hello@tactician.run" class="modal-email">hello@tactician.run</a>
+  </div>
+</div>
+
+<!-- ── Privacy modal ──────────────────────────────────────── -->
+<div id="privacy-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
+  <div class="modal-card modal-card--legal">
+    <button class="modal-close" id="privacy-close" aria-label="Close privacy notice">×</button>
+    <div class="modal-label">Legal</div>
+    <div class="modal-legal-scroll">
+      <h2 class="modal-legal-h1" id="privacy-modal-title">Privacy Notice</h2>
+      <div class="modal-legal-meta">Last updated · May 2026</div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">What We Collect</div>
+        <p>When you join the waitlist, we collect your name, email address, and optionally your goal race and target finish time. That's it.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Why</div>
+        <p>To manage the waitlist and contact you about Tactician's launch. We will not email you for any other purpose.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Who Sees It</div>
+        <p>Your data is processed by <a href="https://loops.so" target="_blank" rel="noopener">Loops</a> (our email service provider, US-based) and stored on servers provided by Vercel (our hosting provider). No one else has access to your information. We do not sell, share, or transfer your data to any third party for any purpose.</p>
+        <p>There are no tracking pixels or analytics on this site. Vercel may set minimal functional cookies to serve the page. We set none ourselves.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Legal Basis</div>
+        <p>We rely on legitimate interest and your consent at the point of signup. Submitting the form is your affirmative action. You can withdraw at any time.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Retention</div>
+        <p>We hold your data until Tactician launches or until you unsubscribe — whichever comes first. If you request deletion, we will remove your record within 30 days.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Your Rights</div>
+        <p>Under GDPR and applicable law, you have the right to access, correct, or delete the personal data we hold about you. To exercise any of these rights, email us at <a href="mailto:hello@tactician.run">hello@tactician.run</a>. We will respond within 30 days.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Contact</div>
+        <p>Questions about this notice: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Terms modal ────────────────────────────────────────── -->
+<div id="terms-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
+  <div class="modal-card modal-card--legal">
+    <button class="modal-close" id="terms-close" aria-label="Close terms of use">×</button>
+    <div class="modal-label">Legal</div>
+    <div class="modal-legal-scroll">
+      <h2 class="modal-legal-h1" id="terms-modal-title">Terms of Use</h2>
+      <div class="modal-legal-meta">Last updated · May 2026</div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">What This Site Is</div>
+        <p>tactician.run is a pre-launch information and waitlist site. No product is currently available for purchase or download. Joining the waitlist is an expression of interest — it creates no contractual obligation on your part or ours.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Pricing</div>
+        <p>Any pricing shown on this site is indicative only. It is not a binding offer. Pricing will be confirmed at the time of launch, and any purchase agreement will be governed by separate terms issued at that time.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Content</div>
+        <p>All content on this site — including text, branding, and product descriptions — is owned by Tactician. You may not reproduce or redistribute any part of it without written permission.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Availability</div>
+        <p>This site is provided as-is. We make no guarantees about uptime, accuracy, or continuity. We may change or remove content at any time without notice.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Governing Law</div>
+        <p>These terms are governed by the laws of Portugal. Any disputes will be subject to the exclusive jurisdiction of the Portuguese courts.</p>
+      </div>
+      <div class="modal-legal-section">
+        <div class="modal-legal-section-label">Contact</div>
+        <p>Questions: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -627,13 +718,103 @@
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // ── Waitlist form: prevent default + flash success state
+  // ── Experience level select: dim placeholder until a value is chosen
+  const lvlSel = document.getElementById('f-level');
+  if (lvlSel) {
+    lvlSel.addEventListener('change', () => {
+      lvlSel.classList.toggle('has-value', !!lvlSel.value);
+    });
+  }
+
+  // ── Waitlist form: Loops submission
   const form = document.getElementById('waitlist-form');
   const btn = document.getElementById('waitlist-submit');
-  form.addEventListener('submit', (ev) => {
+  const btnLabel = btn.querySelector('span:first-child');
+  const errorBar = document.getElementById('waitlist-error-bar');
+  const successPanel = document.getElementById('waitlist-success');
+
+  // ── Seat count
+  async function loadSeats() {
+    try {
+      const res = await fetch('/api/seats');
+      if (!res.ok) return;
+      const data = await res.json();
+      const claimed = data.claimed ?? 0;
+
+      const seatCountEl = document.getElementById('seat-count');
+      if (seatCountEl) seatCountEl.textContent = `${claimed} / 100 claimed`;
+
+      const offerFootCount = document.getElementById('offer-foot-count');
+      if (offerFootCount) offerFootCount.textContent = `${claimed} / 100`;
+
+      const offerBarFill = document.getElementById('offer-bar-fill');
+      if (offerBarFill) offerBarFill.style.width = `${Math.min(claimed, 100)}%`;
+
+      const seatsClaimedEl = document.getElementById('seats-claimed-count');
+      if (seatsClaimedEl) seatsClaimedEl.textContent = claimed;
+
+      const seatsStatusRow = document.getElementById('seats-status-row');
+      if (seatsStatusRow) seatsStatusRow.style.display = 'flex';
+    } catch (_) {}
+  }
+  loadSeats();
+
+  form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
+
+    errorBar.style.display = 'none';
+    errorBar.textContent = '';
     btn.disabled = true;
-    btn.innerHTML = '<span>Seat reserved · check email</span><span class="arrow mono">✓</span>';
+    btnLabel.textContent = 'Submitting…';
+
+    const payload = {
+      firstName: document.getElementById('f-name').value.trim(),
+      email: document.getElementById('f-email').value.trim(),
+    };
+    const race = document.getElementById('f-race').value.trim();
+    const level = document.getElementById('f-level').value;
+    if (race)  payload.goalRace = race;
+    if (level) payload.experienceLevel = level;
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (res.status === 429) {
+        throw new Error('Too many requests — please try again in a moment');
+      }
+
+      if (!res.ok || (data && data.success === false)) {
+        throw new Error((data && data.message) || 'Something went wrong — please try again');
+      }
+
+      const fsLabel = successPanel.querySelector('.fs-label');
+      const fsHead  = successPanel.querySelector('.fs-head');
+      const fsBody  = successPanel.querySelector('.fs-body');
+      if (data && data.foundingAthlete) {
+        if (fsLabel) fsLabel.textContent = 'Seat secured';
+        if (fsHead)  fsHead.textContent  = "You're a founding athlete.";
+        if (fsBody)  fsBody.textContent  = "Check your email — we'll send your early access details before launch.";
+      } else {
+        if (fsLabel) fsLabel.textContent = 'Waitlisted';
+        if (fsHead)  fsHead.textContent  = "You're on the waitlist.";
+        if (fsBody)  fsBody.textContent  = "Check your email — we'll reach out with access details before launch.";
+      }
+
+      loadSeats();
+      form.style.display = 'none';
+      successPanel.style.display = '';
+    } catch (err) {
+      errorBar.textContent = err.message;
+      errorBar.style.display = 'flex';
+      btn.disabled = false;
+      btnLabel.textContent = 'Join Waitlist';
+    }
   });
 
   // ── Contact modal
@@ -661,6 +842,32 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
   })();
+
+  // ── Legal modals (Privacy + Terms)
+  ['privacy', 'terms'].forEach(id => {
+    const overlay  = document.getElementById(id + '-modal');
+    const openBtn  = document.getElementById(id + '-link');
+    const closeBtn = document.getElementById(id + '-close');
+    if (!overlay || !openBtn) return;
+
+    function openModal()  {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+    function closeModal() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
+  });
 </script>
 
 </body>

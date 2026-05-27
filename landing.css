@@ -701,8 +701,8 @@ button { font-family: inherit; }
   text-transform: uppercase;
   pointer-events: none;
 }
-.frag-sparkline-wrap .pin.now { color: var(--text-dim); top: 38%; left: 51%; }
-.frag-sparkline-wrap .pin.race { color: var(--status-at-risk); top: 0; right: 0; }
+.frag-sparkline-wrap .pin.now { color: var(--text-dim); top: 55%; left: 51%; }
+.frag-sparkline-wrap .pin.race { color: var(--status-at-risk); top: 44%; right: 0; }
 .frag-sparkline-legend {
   display: flex; gap: 16px;
   margin-top: 12px;
@@ -869,7 +869,7 @@ button { font-family: inherit; }
   font-weight: 600;
   line-height: 0.92;
   letter-spacing: -0.03em;
-  color: var(--status-deviating);
+  color: var(--status-at-risk);
   margin: 2px 0 8px;
 }
 .step-block .sb-rationale {
@@ -1592,6 +1592,26 @@ button { font-family: inherit; }
 .final-submit button:hover { opacity: 0.88; }
 .final-submit button:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* Compact decisions list so it fits without scrolling */
+.cx-phone-inner .scr-dec-list { padding: 4px 14px 10px; }
+.cx-phone-inner .scr-dec-row { padding: 10px 0; }
+
+/* Experience level select — matches input aesthetic */
+.final-form .field select {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-ui);
+  font-size: 18px;
+  color: var(--text-dim);
+  padding: 4px 0;
+  letter-spacing: -0.01em;
+  width: 100%;
+  cursor: pointer;
+}
+.final-form .field select.has-value { color: var(--text-primary); }
+.final-form .field select option { color: var(--text-primary); }
+
 @media (max-width: 640px) {
   .final {
     padding-top: clamp(48px, 8vw, 80px);
@@ -1654,6 +1674,75 @@ button { font-family: inherit; }
     border-radius: 0;
     order: 1;
   }
+}
+
+/* ── Waitlist form: feedback states ──────────────────────── */
+.form-error-row {
+  grid-column: span 2;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-top: 1px solid color-mix(in oklab, var(--status-deviating) 30%, transparent);
+  background: color-mix(in oklab, var(--status-deviating) 8%, transparent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--status-deviating);
+}
+.form-error-row::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--status-deviating);
+  flex-shrink: 0;
+}
+.form-success {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: clamp(48px, 6vw, 80px) clamp(32px, 4vw, 56px);
+}
+.form-success .fs-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--status-on-track);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.form-success .fs-label::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--status-on-track);
+}
+.form-success .fs-head {
+  font-family: var(--font-ui);
+  font-size: clamp(36px, 4.5vw, 60px);
+  font-weight: 600;
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.form-success .fs-body {
+  font-family: var(--font-ui);
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 44ch;
+  margin: 0 0 28px;
+}
+.form-success .fs-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 /* ── FOOTER ───────────────────────────────────────────────── */
@@ -1784,12 +1873,6 @@ button { font-family: inherit; }
   transform: translateY(0);
   opacity: 1;
 }
-.modal-card::before {
-  content: "";
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--status-on-track);
-}
 .modal-close {
   position: absolute;
   top: 14px; right: 16px;
@@ -1821,7 +1904,7 @@ button { font-family: inherit; }
 .modal-email {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: #FFAA00;
+  color: var(--text-primary);
   text-decoration: none;
   letter-spacing: 0.04em;
   display: inline-block;
@@ -1830,4 +1913,63 @@ button { font-family: inherit; }
 
 @media (max-width: 480px) {
   .modal-card { padding: 28px 24px 24px; }
+}
+
+/* ── Legal modals (Privacy / Terms) ────────────────────────── */
+.modal-card--legal {
+  max-width: 620px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-legal-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 4px;
+}
+.modal-legal-scroll::-webkit-scrollbar { width: 4px; }
+.modal-legal-scroll::-webkit-scrollbar-track { background: transparent; }
+.modal-legal-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.modal-legal-h1 {
+  font-family: var(--font-ui);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.modal-legal-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.modal-legal-section { margin-bottom: 28px; }
+.modal-legal-section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-legal-section p {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.modal-legal-section p + p { margin-top: 10px; }
+.modal-legal-section a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.modal-legal-section a:hover { text-decoration: underline; }
+@media (max-width: 480px) {
+  .modal-card--legal { max-height: 90vh; }
 }
