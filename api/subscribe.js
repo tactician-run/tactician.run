@@ -5,7 +5,6 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-const LOOPS_FORM_URL = 'https://app.loops.so/api/newsletter-form/cmp7nu95314qb0izf0kva23ds';
 const FOUNDING_LIMIT = 100;
 
 module.exports = async function handler(req, res) {
@@ -19,39 +18,69 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ success: false, message: 'Name and email are required' });
   }
 
+  const loopsApiKey = process.env.LOOPS_API_KEY;
+  if (!loopsApiKey) {
+    console.error('LOOPS_API_KEY is not set');
+    return res.status(500).json({ success: false, message: 'Server configuration error' });
+  }
+
   try {
-    // Atomically claim a seat. INCR returns the value after increment, so
-    // the first 100 callers get newCount 1–100 and are founding athletes.
     const newCount = await redis.incr('founding_athlete_count');
     const foundingAthlete = newCount <= FOUNDING_LIMIT;
     const seatsRemaining = Math.max(0, FOUNDING_LIMIT - newCount);
 
-    // Forward to Loops
-    const loopsBody = new URLSearchParams({
-      firstName,
+    // Step 1 — Create/update the contact
+    const contactPayload = {
       email,
+      firstName,
       userGroup: 'waitlist',
-      foundingAthlete: String(foundingAthlete),
-    });
-    if (goalRace)        loopsBody.set('goalRace', goalRace);
-    if (experienceLevel) loopsBody.set('experienceLevel', experienceLevel);
+      foundingAthlete,
+    };
+    if (goalRace)        contactPayload.goalRace = goalRace;
+    if (experienceLevel) contactPayload.experienceLevel = experienceLevel;
 
-    const loopsRes = await fetch(LOOPS_FORM_URL, {
+    const contactRes = await fetch('https://api.loops.so/v1/contacts/create', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: loopsBody.toString(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${loopsApiKey}`,
+      },
+      body: JSON.stringify(contactPayload),
     });
 
-    if (loopsRes.status === 429) {
+    if (contactRes.status === 429) {
       return res.status(429).json({ success: false, message: 'Too many requests — please try again in a moment' });
     }
 
-    const loopsData = await loopsRes.json().catch(() => null);
+    const contactData = await contactRes.json().catch(() => null);
 
-    if (!loopsRes.ok || (loopsData && loopsData.success === false)) {
+    if (!contactRes.ok || (contactData && contactData.success === false)) {
       return res.status(502).json({
         success: false,
-        message: (loopsData && loopsData.message) || 'Submission failed — please try again',
+        message: (contactData && contactData.message) || 'Submission failed — please try again',
+      });
+    }
+
+    // Step 2 — Trigger the waitlistSignup event
+    const eventRes = await fetch('https://api.loops.so/v1/events/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${loopsApiKey}`,
+      },
+      body: JSON.stringify({ email, eventName: 'waitlistSignup' }),
+    });
+
+    if (eventRes.status === 429) {
+      return res.status(429).json({ success: false, message: 'Too many requests — please try again in a moment' });
+    }
+
+    const eventData = await eventRes.json().catch(() => null);
+
+    if (!eventRes.ok || (eventData && eventData.success === false)) {
+      return res.status(502).json({
+        success: false,
+        message: (eventData && eventData.message) || 'Event trigger failed — please try again',
       });
     }
 
