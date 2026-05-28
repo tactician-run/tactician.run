@@ -1497,6 +1497,19 @@ button { font-family: inherit; }
   .offer-wrap { grid-template-columns: 1fr; }
 }
 
+/* ── Founding section — full / sold-out state */
+#founding.founding-is-full .offer-left h2,
+#founding.founding-is-full .offer-left .lede,
+#founding.founding-is-full .offer-benefits .label,
+#founding.founding-is-full .offer-benefits .meta,
+#founding.founding-is-full .fr-eye,
+#founding.founding-is-full .fr-headline,
+#founding.founding-is-full .fr-list li {
+  text-decoration: line-through;
+  text-decoration-color: var(--text-dim);
+  opacity: 0.5;
+}
+
 /* ── FINAL CTA ────────────────────────────────────────────── */
 .final {
   padding-top: clamp(96px, 12vw, 144px);

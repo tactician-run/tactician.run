@@ -775,6 +775,11 @@
         statusLabel.textContent = claimed >= 100 ? 'Founding · closed' : claimed >= 80 ? 'Founding · near capacity' : 'Founding · open';
       }
 
+      const foundingSection = document.getElementById('founding');
+      if (foundingSection) {
+        foundingSection.classList.toggle('founding-is-full', claimed >= 100);
+      }
+
       const seatsClaimedEl = document.getElementById('seats-claimed-count');
       if (seatsClaimedEl) seatsClaimedEl.textContent = claimed;
 
