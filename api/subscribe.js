@@ -34,10 +34,12 @@ module.exports = async function handler(req, res) {
       email,
       firstName,
       userGroup: 'waitlist',
-      foundingAthlete,
+      foundingAthlete: Boolean(foundingAthlete),
     };
     if (goalRace)        contactPayload.goalRace = goalRace;
     if (experienceLevel) contactPayload.experienceLevel = experienceLevel;
+
+    console.log('Loops contact request body:', JSON.stringify(contactPayload));
 
     const contactRes = await fetch('https://api.loops.so/v1/contacts/create', {
       method: 'POST',
@@ -48,13 +50,21 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify(contactPayload),
     });
 
+    console.log('Loops contact response status:', contactRes.status);
+
     if (contactRes.status === 429) {
       return res.status(429).json({ success: false, message: 'Too many requests — please try again in a moment' });
     }
 
-    const contactData = await contactRes.json().catch(() => null);
+    const contactData = await contactRes.json().catch((e) => {
+      console.error('Loops contact JSON parse error:', e);
+      return null;
+    });
+
+    console.log('Loops contact response data:', JSON.stringify(contactData));
 
     if (!contactRes.ok || (contactData && contactData.success === false)) {
+      console.error('Loops contact creation failed:', contactRes.status, JSON.stringify(contactData));
       return res.status(502).json({
         success: false,
         message: (contactData && contactData.message) || 'Submission failed — please try again',
@@ -62,22 +72,33 @@ module.exports = async function handler(req, res) {
     }
 
     // Step 2 — Trigger the waitlistSignup event
+    const eventPayload = { email, eventName: 'waitlistSignup' };
+    console.log('Loops event request body:', JSON.stringify(eventPayload));
+
     const eventRes = await fetch('https://api.loops.so/v1/events/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${loopsApiKey}`,
       },
-      body: JSON.stringify({ email, eventName: 'waitlistSignup' }),
+      body: JSON.stringify(eventPayload),
     });
+
+    console.log('Loops event response status:', eventRes.status);
 
     if (eventRes.status === 429) {
       return res.status(429).json({ success: false, message: 'Too many requests — please try again in a moment' });
     }
 
-    const eventData = await eventRes.json().catch(() => null);
+    const eventData = await eventRes.json().catch((e) => {
+      console.error('Loops event JSON parse error:', e);
+      return null;
+    });
+
+    console.log('Loops event response data:', JSON.stringify(eventData));
 
     if (!eventRes.ok || (eventData && eventData.success === false)) {
+      console.error('Loops event trigger failed:', eventRes.status, JSON.stringify(eventData));
       return res.status(502).json({
         success: false,
         message: (eventData && eventData.message) || 'Event trigger failed — please try again',
