@@ -119,7 +119,7 @@ module.exports = async function handler(req, res) {
       };
       console.log('Loops transactional request body:', JSON.stringify(txPayload));
 
-      const txRes = await fetch('https://api.loops.so/v1/transactional', {
+      const txRes = await fetch('https://app.loops.so/api/v1/transactional', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
