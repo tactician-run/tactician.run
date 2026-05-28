@@ -28,6 +28,7 @@ module.exports = async function handler(req, res) {
     const newCount = await redis.incr('founding_athlete_count');
     const foundingAthlete = newCount <= FOUNDING_LIMIT;
     const seatsRemaining = Math.max(0, FOUNDING_LIMIT - newCount);
+    const foundingAthleteNumber = foundingAthlete ? newCount : null;
 
     // Step 1 — Create/update the contact
     const contactPayload = {
@@ -36,6 +37,7 @@ module.exports = async function handler(req, res) {
       userGroup: 'waitlist',
       foundingAthlete: Boolean(foundingAthlete),
     };
+    if (foundingAthleteNumber !== null) contactPayload.foundingAthleteNumber = foundingAthleteNumber;
     if (goalRace)        contactPayload.goalRace = goalRace;
     if (experienceLevel) contactPayload.experienceLevel = experienceLevel;
 
@@ -105,7 +107,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({ success: true, foundingAthlete, seatsRemaining });
+    return res.status(200).json({ success: true, foundingAthlete, seatsRemaining, foundingAthleteNumber });
   } catch (err) {
     console.error('subscribe error:', err);
     return res.status(500).json({ success: false, message: 'Server error — please try again' });
