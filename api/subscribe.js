@@ -107,6 +107,37 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // Step 3 — Send founding athlete transactional email
+    if (foundingAthlete) {
+      const txPayload = {
+        transactionalId: 'cmpq13v9702sh0jzy84u4gual',
+        email,
+        dataVariables: {
+          firstName,
+          foundingAthleteNumber: foundingAthleteNumber,
+        },
+      };
+      console.log('Loops transactional request body:', JSON.stringify(txPayload));
+
+      const txRes = await fetch('https://api.loops.so/v1/transactional', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loopsApiKey}`,
+        },
+        body: JSON.stringify(txPayload),
+      });
+
+      console.log('Loops transactional response status:', txRes.status);
+
+      const txData = await txRes.json().catch((e) => {
+        console.error('Loops transactional JSON parse error:', e);
+        return null;
+      });
+
+      console.log('Loops transactional response data:', JSON.stringify(txData));
+    }
+
     return res.status(200).json({ success: true, foundingAthlete, seatsRemaining, foundingAthleteNumber });
   } catch (err) {
     console.error('subscribe error:', err);
