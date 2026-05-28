@@ -481,7 +481,7 @@
 
       <aside class="offer-card reveal" data-delay="1">
         <div class="status-row">
-          <span class="live">Founding · open</span>
+          <span class="live" id="founding-status-label">Founding · open</span>
           <span class="count" id="seat-count">23 / 100 claimed</span>
         </div>
 
@@ -768,6 +768,11 @@
       if (offerCard) {
         const accent = claimed >= 100 ? '#D42B25' : claimed >= 80 ? '#FFAA00' : '#12A12A';
         offerCard.style.setProperty('--founding-accent', accent);
+      }
+
+      const statusLabel = document.getElementById('founding-status-label');
+      if (statusLabel) {
+        statusLabel.textContent = claimed >= 100 ? 'Founding · closed' : claimed >= 80 ? 'Founding · near capacity' : 'Founding · open';
       }
 
       const seatsClaimedEl = document.getElementById('seats-claimed-count');
