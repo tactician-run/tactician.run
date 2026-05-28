@@ -764,6 +764,12 @@
       const offerBarFill = document.getElementById('offer-bar-fill');
       if (offerBarFill) offerBarFill.style.width = `${Math.min(claimed, 100)}%`;
 
+      const offerCard = document.querySelector('.offer-card');
+      if (offerCard) {
+        const accent = claimed >= 100 ? '#D42B25' : claimed >= 80 ? '#FFAA00' : '#12A12A';
+        offerCard.style.setProperty('--founding-accent', accent);
+      }
+
       const seatsClaimedEl = document.getElementById('seats-claimed-count');
       if (seatsClaimedEl) seatsClaimedEl.textContent = claimed;
 
