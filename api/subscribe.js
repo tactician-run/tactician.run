@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
 
     console.log('Loops contact request body:', JSON.stringify(contactPayload));
 
-    const contactRes = await fetch('https://api.loops.so/v1/contacts/create', {
+    const contactRes = await fetch('https://app.loops.so/api/v1/contacts/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ module.exports = async function handler(req, res) {
     const eventPayload = { email, eventName: 'waitlistSignup' };
     console.log('Loops event request body:', JSON.stringify(eventPayload));
 
-    const eventRes = await fetch('https://api.loops.so/v1/events/send', {
+    const eventRes = await fetch('https://app.loops.so/api/v1/events/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
