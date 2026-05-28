@@ -107,36 +107,38 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // Step 3 — Send founding athlete transactional email
-    if (foundingAthlete) {
-      const txPayload = {
-        transactionalId: 'cmpq13v9702sh0jzy84u4gual',
-        email,
-        dataVariables: {
-          firstName,
-          foundingAthleteNumber: foundingAthleteNumber,
-        },
-      };
-      console.log('Loops transactional request body:', JSON.stringify(txPayload));
+    // Step 3 — Send confirmation email (one per signup, branch on founding status)
+    const txPayload = foundingAthlete
+      ? {
+          transactionalId: 'cmpq13v9702sh0jzy84u4gual',
+          email,
+          dataVariables: { firstName, foundingAthleteNumber },
+        }
+      : {
+          transactionalId: 'cmpq1gga303qs0jv349o6cgmv',
+          email,
+          dataVariables: { firstName },
+        };
 
-      const txRes = await fetch('https://app.loops.so/api/v1/transactional', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${loopsApiKey}`,
-        },
-        body: JSON.stringify(txPayload),
-      });
+    console.log('Loops transactional request body:', JSON.stringify(txPayload));
 
-      console.log('Loops transactional response status:', txRes.status);
+    const txRes = await fetch('https://app.loops.so/api/v1/transactional', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${loopsApiKey}`,
+      },
+      body: JSON.stringify(txPayload),
+    });
 
-      const txData = await txRes.json().catch((e) => {
-        console.error('Loops transactional JSON parse error:', e);
-        return null;
-      });
+    console.log('Loops transactional response status:', txRes.status);
 
-      console.log('Loops transactional response data:', JSON.stringify(txData));
-    }
+    const txData = await txRes.json().catch((e) => {
+      console.error('Loops transactional JSON parse error:', e);
+      return null;
+    });
+
+    console.log('Loops transactional response data:', JSON.stringify(txData));
 
     return res.status(200).json({ success: true, foundingAthlete, seatsRemaining, foundingAthleteNumber });
   } catch (err) {
