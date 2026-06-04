@@ -166,6 +166,62 @@
   --border-soft:   #E3E3E1;
 }
 
+/* ---------- Auto light mode — system preference ----------
+   Applies the same light token values when the OS is in light mode,
+   without requiring a .light class. The .dark / .ink section overrides
+   in landing.css still take precedence for intentional dark moments. */
+
+/* User explicitly chose dark while OS is in light mode — restore dark tokens */
+@media (prefers-color-scheme: light) {
+  :root[data-theme="dark"] {
+    --bg-base:      #0D0D0C;
+    --bg-raised:    #1A1A19;
+    --bg-card:      #272725;
+    --bg-elevated:  #343432;
+    --bg-subtle:    #41413E;
+    --bg-drawer:    #060605;
+    --bg-ink:       #070706;
+
+    --bg-active:        #FFFFFF;
+    --bg-active-card:   #D8D8D5;
+    --text-on-active:   #0A0A09;
+
+    --text-primary:    #F3F3F2;
+    --text-secondary:  #C1C1BE;
+    --text-muted:      #A8A8A4;
+    --text-dim:        #757570;
+    --text-ghost:      #454541;
+
+    --border:        #343432;
+    --border-soft:   #23231F;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-base:      #EDECEA;
+    --bg-raised:    #F4F3F1;
+    --bg-card:      #FFFFFF;
+    --bg-elevated:  #EAEAE8;
+    --bg-subtle:    #E3E3E1;
+    --bg-drawer:    #CECDCA;
+    --bg-ink:       #FAFAF8;
+
+    --bg-active:        #000000;
+    --bg-active-card:   #1C1C1B;
+    --text-on-active:   #FFFFFF;
+
+    --text-primary:    #0C0C0B;
+    --text-secondary:  #3A3A38;
+    --text-muted:      #6F6F6B;
+    --text-dim:        #A8A8A4;
+    --text-ghost:      #C4C3C0;
+
+    --border:        #D8D8D5;
+    --border-soft:   #E3E3E1;
+  }
+}
+
 /* ---------- Semantic typography classes ----------
    Use these on text elements so the document reads correctly even
    without inline font/weight specs. */

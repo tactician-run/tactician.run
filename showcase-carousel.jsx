@@ -163,7 +163,7 @@
                     fill="none" stroke="#A8A8A4" strokeWidth="1" strokeDasharray="3 3" />
               {/* acute — solid */}
               <path d="M0 138 L28 124 L56 118 L84 108 L112 88 L140 78 L168 70 L196 60 L224 54 L252 48 L280 44"
-                    fill="none" stroke="#F3F3F2" strokeWidth="1.5" />
+                    fill="none" stroke="var(--text-primary)" strokeWidth="1.5" />
               <path d="M0 138 L28 124 L56 118 L84 108 L112 88 L140 78 L168 70 L196 60 L224 54 L252 48 L280 44 L280 180 L0 180 Z"
                     fill="url(#trajGrad)" />
               {/* current node */}
@@ -172,8 +172,8 @@
             </svg>
           </div>
           <div className="scr-traj-legend">
-            <span><span className="swatch" style={{ background: '#F3F3F2' }}></span>Acute 7d</span>
-            <span><span className="swatch" style={{ background: 'transparent', borderTop: '1.5px dashed #A8A8A4' }}></span>Chronic 28d</span>
+            <span><span className="swatch" style={{ background: 'var(--text-primary)' }}></span>Acute 7d</span>
+            <span><span className="swatch" style={{ background: 'transparent', borderTop: '1.5px dashed var(--text-muted)' }}></span>Chronic 28d</span>
           </div>
         </div>
         <div className="scr-foot">
@@ -206,7 +206,7 @@
               <div key={i} className="scr-sys-cell">
                 <span className="k">{c.k}</span>
                 <span className={`v ${c.tone || ''}`}>
-                  {c.v}{c.unit && <span style={{ fontSize: 10, color: '#757570', marginLeft: 4, letterSpacing: '0.18em' }}>{c.unit}</span>}
+                  {c.v}{c.unit && <span style={{ fontSize: 10, color: 'var(--text-dim)', marginLeft: 4, letterSpacing: '0.18em' }}>{c.unit}</span>}
                 </span>
               </div>
             ))}

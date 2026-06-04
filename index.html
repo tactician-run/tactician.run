@@ -21,6 +21,17 @@
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 
+<!-- Apply stored theme before paint to prevent flash of wrong mode -->
+<script>
+  (function () {
+    var t = localStorage.getItem('tact-theme');
+    if (t) {
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.style.colorScheme = t;
+    }
+  })();
+</script>
+
 <!-- Design system tokens + fonts -->
 <link rel="stylesheet" href="design-system/colors_and_type.css" />
 <!-- Page styles -->
@@ -123,7 +134,7 @@
 
       <!-- Hero directive card — replaces the phone stack with immediate product proof -->
       <div class="hero-visual reveal" data-delay="2">
-        <aside class="directive-card" aria-label="Sample directive output" style="background-color: rgb(35, 35, 31)">
+        <aside class="directive-card" aria-label="Sample directive output">
           <div class="dc-head">
             <span class="lbl">Directive · Today</span>
             <span class="dim">Mon 19 May</span>
@@ -247,14 +258,14 @@
           </div>
         </div>
 
-        <div class="problem-card" style="background: #060605; color: #F3F3F2; border-color: #2E2E2A;">
+        <div class="problem-card" style="background: var(--bg-drawer); border-color: var(--border-soft);">
           <div class="label-row">
             <span class="mono" style="font-size: 10px; letter-spacing: 0.22em; color: var(--text-muted); text-transform: uppercase;">Familiar?</span>
           </div>
-          <div style="font-family: var(--font-ui); font-size: 16px; line-height: 1.5; color: #C1C1BE;">
+          <div style="font-family: var(--font-ui); font-size: 16px; line-height: 1.5; color: var(--text-secondary);">
             "I missed Tuesday. Should I move Tuesday's workout to today, or skip it? Will it cost me the race?"
           </div>
-          <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; color: #757570; text-transform: uppercase;">
+          <div style="margin-top: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; color: var(--text-dim); text-transform: uppercase;">
             Every runner · every block
           </div>
         </div>
@@ -367,8 +378,8 @@
 </section>
 
 <!-- ─────────────────────────  HOW IT WORKS  ─────────────────────────── -->
-<section class="section ink" id="how" data-screen-label="05 How It Works"
-         style="background: var(--bg-base); color: var(--text-primary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<section class="section" id="how" data-screen-label="05 How It Works"
+         style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
     <div class="sec-head reveal">
       <span class="t-eyebrow"><span class="dot"></span> Flow · 03</span>
@@ -407,7 +418,7 @@
               <path d="M0 64 L28 60 L56 58 L84 52 L112 48 L140 40 L168 36 L196 30 L224 26 L252 22 L280 18"
                     fill="none" stroke="#A8A8A4" stroke-width="1" stroke-dasharray="3 3"/>
               <path d="M0 68 L28 62 L56 56 L84 50 L112 42 L140 36 L168 30 L196 26 L224 22 L252 20 L280 18"
-                    fill="none" stroke="#F3F3F2" stroke-width="1.5"/>
+                    fill="none" stroke="var(--text-primary)" stroke-width="1.5"/>
               <circle cx="280" cy="18" r="3" fill="#FFAA00"/>
             </svg>
           </div>
@@ -437,11 +448,11 @@
 </section>
 
 <!-- ─────────────────────────  PRODUCT SHOWCASE  ─────────────────────────── -->
-<section class="section ink showcase" id="showcase" data-screen-label="06 Product">
+<section class="section showcase" id="showcase" data-screen-label="06 Product">
   <div class="container">
     <div class="sec-head reveal" style="max-width: 100%;">
       <span class="t-eyebrow" style="color: var(--text-muted);"><span class="dot"></span> Product · 04</span>
-      <h2 class="t-section-head" style="margin-top: 24px; color: #F3F3F2; max-width: 24ch;">
+      <h2 class="t-section-head" style="margin-top: 24px; max-width: 24ch;">
         Built like a flight deck. Not a feed.
       </h2>
     </div>
@@ -452,7 +463,7 @@
 </section>
 
 <!-- ─────────────────────────  FOUNDING ATHLETE OFFER  ─────────────────────────── -->
-<section class="section ink" id="founding" data-screen-label="07 Founding">
+<section class="section" id="founding" data-screen-label="07 Founding">
   <div class="container">
     <div class="offer-wrap">
       <div class="offer-left reveal">
@@ -584,6 +595,10 @@
     </div>
     <div class="foot-meta">
       <span>v0.9.4 · build a8e2</span>
+      <div class="theme-toggle" id="theme-toggle" role="group" aria-label="Display mode">
+        <button class="tt-opt" data-val="dark">Dark</button>
+        <button class="tt-opt" data-val="light">Light</button>
+      </div>
     </div>
   </div>
 </footer>
@@ -898,6 +913,36 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
   });
+
+  // ── Theme toggle
+  (function () {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+
+    const opts = toggle.querySelectorAll('.tt-opt');
+
+    function resolvedTheme() {
+      const stored = localStorage.getItem('tact-theme');
+      if (stored) return stored;
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+
+    function applyTheme(val) {
+      document.documentElement.setAttribute('data-theme', val);
+      document.documentElement.style.colorScheme = val;
+      localStorage.setItem('tact-theme', val);
+      opts.forEach(btn => btn.setAttribute('aria-pressed', btn.dataset.val === val ? 'true' : 'false'));
+    }
+
+    applyTheme(resolvedTheme());
+
+    opts.forEach(btn => btn.addEventListener('click', () => applyTheme(btn.dataset.val)));
+
+    // Keep in sync if OS preference changes and no manual override is stored
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+      if (!localStorage.getItem('tact-theme')) applyTheme(e.matches ? 'light' : 'dark');
+    });
+  })();
 </script>
 
 </body>
