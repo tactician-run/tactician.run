@@ -382,7 +382,7 @@ button { font-family: inherit; }
 .directive-card::before {
   content: "";
   position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px; background: var(--status-at-risk);
+  width: 3px; background: var(--status-on-track);
 }
 .directive-card .dc-head {
   display: flex; align-items: center; justify-content: space-between;
@@ -408,7 +408,7 @@ button { font-family: inherit; }
   font-weight: 600;
   line-height: 0.92;
   letter-spacing: -0.03em;
-  color: var(--status-at-risk);
+  color: var(--status-on-track);
   margin-bottom: 18px;
 }
 .directive-card .dc-workout {
@@ -869,7 +869,7 @@ button { font-family: inherit; }
   font-weight: 600;
   line-height: 0.92;
   letter-spacing: -0.03em;
-  color: var(--status-at-risk);
+  color: var(--status-on-track);
   margin: 2px 0 8px;
 }
 .step-block .sb-rationale {
@@ -1071,7 +1071,7 @@ button { font-family: inherit; }
   font-weight: 600;
   line-height: 0.92;
   letter-spacing: -0.04em;
-  color: var(--status-at-risk);
+  color: var(--status-on-track);
   margin: 0 0 24px 0;
 }
 .scr-cmd-workout {
@@ -1093,12 +1093,12 @@ button { font-family: inherit; }
 .scr-cmd-flag {
   font-family: var(--font-mono); font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--status-deviating);
+  color: var(--status-on-track);
   margin-bottom: 12px;
   display: inline-flex; align-items: center; gap: 8px;
 }
 .scr-cmd-flag::before {
-  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--status-deviating);
+  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--status-on-track);
 }
 .scr-cmd-fired {
   list-style: none; padding: 0; margin: 0;
@@ -1112,7 +1112,7 @@ button { font-family: inherit; }
   color: var(--text-secondary);
 }
 .scr-cmd-fired li::before {
-  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--status-deviating);
+  content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--status-on-track);
   flex-shrink: 0;
 }
 .scr-cmd-actions {
@@ -1269,7 +1269,7 @@ button { font-family: inherit; }
 }
 .scr-sys-rule:last-child { border-bottom: 1px solid var(--border); }
 .scr-sys-rule .dot {
-  width: 6px; height: 6px; border-radius: 999px; background: var(--status-deviating);
+  width: 6px; height: 6px; border-radius: 999px; background: var(--status-on-track);
 }
 .scr-sys-rule .name {
   font-family: var(--font-ui); font-size: 13px; font-weight: 500; color: var(--text-primary);

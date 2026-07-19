@@ -13,7 +13,7 @@
       tagline: "Today's directive.",
       desc: "One screen. One directive. The engine reads your last seven days and writes today's workout against your actual load — not yesterday's intention.",
       rows: [
-        { k: 'Directive', v: 'REDUCE' },
+        { k: 'Directive', v: 'PUSH' },
         { k: 'Triggers fired', v: '2' },
         { k: 'Auditable trace', v: 'Yes' },
       ],
@@ -33,7 +33,7 @@
       num: '03',
       label: 'TRAJECTORY',
       tagline: 'Load curve.',
-      desc: 'Acute vs chronic load across the cycle. Phase boundaries baked in. You see the ceiling. Tactician enforces it.',
+      desc: 'Acute vs chronic load across the cycle. Phase boundaries baked in. You see the limits. Tactician enforces them.',
       rows: [
         { k: 'Acute window', v: '7d' },
         { k: 'Chronic window', v: '28d' },
@@ -63,15 +63,15 @@
         </div>
         <div className="scr-cmd-body">
           <div className="scr-cmd-eye">Action</div>
-          <div className="scr-cmd-word">REDUCE</div>
+          <div className="scr-cmd-word">PUSH</div>
           <div className="scr-cmd-workout">
             <span className="k">Long Run</span>
-            <span className="v"><span className="strike">18mi</span>→ 12mi</span>
+            <span className="v"><span className="strike">14mi</span>→ 18mi</span>
           </div>
-          <div className="scr-cmd-flag">Load Ceiling Breach</div>
+          <div className="scr-cmd-flag">Load Headroom Open</div>
           <ul className="scr-cmd-fired">
-            <li>Fired · Intensity Stack Protect</li>
-            <li>Fired · ACR Ceiling Breach</li>
+            <li>Fired · Intensity Headroom Clear</li>
+            <li>Fired · Build Window Active</li>
           </ul>
           <div className="scr-cmd-actions">
             <button>Why</button>
@@ -80,7 +80,7 @@
           </div>
         </div>
         <div className="scr-foot">
-          <span>ACR 1.34 / 1.50</span>
+          <span>ACR 0.78 / 0.80</span>
           <span>WK 8 / 12</span>
         </div>
       </div>
@@ -90,7 +90,7 @@
   // ─── SCREEN 02 — DECISIONS ────────────────────────────────────────
   function DecisionsScreenMock() {
     const rows = [
-      { date: 'Mon 19', badge: 'REDUCE',  tone: 'warn', name: 'Long run shortened to 12mi',     why: 'ACR 1.34 above ceiling' },
+      { date: 'Mon 19', badge: 'PUSH',    tone: 'ok',   name: 'Long run extended to 18mi',       why: 'ACR 0.78 below floor' },
       { date: 'Sun 18', badge: 'PROCEED', tone: 'ok',   name: 'Recovery 6mi · Z1',              why: 'Load within band' },
       { date: 'Sat 17', badge: 'PUSH',    tone: 'ok',   name: 'Tempo 5×8min @ T',               why: 'Pace held in range' },
       { date: 'Fri 16', badge: 'REST',    tone: 'mute', name: 'No session',                     why: 'Planned rest day' },
@@ -129,7 +129,7 @@
       <div className="scr">
         <div className="scr-hdr">
           <span>Trajectory · 28D</span>
-          <span>Vienna HM · 42D</span>
+          <span>Vienna HM · 28D</span>
         </div>
         <div className="scr-traj-body">
           <div className="scr-traj-phases">
@@ -141,34 +141,34 @@
           </div>
 
           <div className="scr-traj-acr">
-            <span className="v">1.34</span>
-            <span className="u">ACR · Above</span>
+            <span className="v">0.78</span>
+            <span className="u">ACR · Below</span>
           </div>
-          <div className="scr-traj-meta">Acute 7d / Chronic 28d · Ceiling 1.50</div>
+          <div className="scr-traj-meta">Acute 7d / Chronic 28d · Floor 0.80</div>
 
           <div className="scr-traj-chart">
             <svg viewBox="0 0 280 180" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="trajGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%"  stopColor="#FFAA00" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="#FFAA00" stopOpacity="0" />
+                  <stop offset="0%"  stopColor="#12A12A" stopOpacity="0.18" />
+                  <stop offset="100%" stopColor="#12A12A" stopOpacity="0" />
                 </linearGradient>
               </defs>
-              {/* ceiling line */}
-              <line x1="0" y1="40" x2="280" y2="40" stroke="#FFAA00" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.7" />
-              <text x="4" y="34" fontFamily="JetBrains Mono" fontSize="8" fill="#FFAA00" letterSpacing="1">CEILING 1.50</text>
+              {/* floor line */}
+              <line x1="0" y1="120" x2="280" y2="120" stroke="#FFAA00" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.7" />
+              <text x="4" y="114" fontFamily="JetBrains Mono" fontSize="8" fill="#FFAA00" letterSpacing="1">FLOOR 0.80</text>
 
               {/* chronic — dashed */}
-              <path d="M0 130 L28 122 L56 116 L84 110 L112 104 L140 96 L168 90 L196 84 L224 78 L252 72 L280 68"
+              <path d="M0 96 L28 97 L56 98 L84 99 L112 100 L140 100 L168 101 L196 102 L224 103 L252 104 L280 104"
                     fill="none" stroke="#A8A8A4" strokeWidth="1" strokeDasharray="3 3" />
               {/* acute — solid */}
-              <path d="M0 138 L28 124 L56 118 L84 108 L112 88 L140 78 L168 70 L196 60 L224 54 L252 48 L280 44"
+              <path d="M0 100 L28 104 L56 108 L84 112 L112 116 L140 122 L168 128 L196 134 L224 140 L252 146 L280 150"
                     fill="none" stroke="var(--text-primary)" strokeWidth="1.5" />
-              <path d="M0 138 L28 124 L56 118 L84 108 L112 88 L140 78 L168 70 L196 60 L224 54 L252 48 L280 44 L280 180 L0 180 Z"
+              <path d="M0 100 L28 104 L56 108 L84 112 L112 116 L140 122 L168 128 L196 134 L224 140 L252 146 L280 150 L280 180 L0 180 Z"
                     fill="url(#trajGrad)" />
               {/* current node */}
-              <circle cx="280" cy="44" r="3.5" fill="#FFAA00" />
-              <text x="232" y="58" fontFamily="JetBrains Mono" fontSize="8" fill="#FFAA00" letterSpacing="1">TODAY</text>
+              <circle cx="280" cy="150" r="3.5" fill="#12A12A" />
+              <text x="232" y="146" fontFamily="JetBrains Mono" fontSize="8" fill="#12A12A" letterSpacing="1">TODAY</text>
             </svg>
           </div>
           <div className="scr-traj-legend">
@@ -178,7 +178,7 @@
         </div>
         <div className="scr-foot">
           <span>Phase · Build</span>
-          <span>42 days to race</span>
+          <span>28 days to race</span>
         </div>
       </div>
     );
@@ -187,12 +187,12 @@
   // ─── SCREEN 04 — SYSTEM ───────────────────────────────────────────
   function SystemScreenMock() {
     const cells = [
-      { k: 'Acute 7d',         v: '58.2',  unit: 'km', tone: 'warn' },
+      { k: 'Acute 7d',         v: '33.9',  unit: 'km' },
       { k: 'Chronic 28d',      v: '43.4',  unit: 'km' },
-      { k: 'ACR',              v: '1.34',  unit: '',   tone: 'warn' },
-      { k: 'Hard sessions',    v: '3 / 7', unit: '',   tone: 'hot' },
-      { k: 'Days since rest',  v: '6',     unit: 'd',  tone: 'warn' },
-      { k: 'Volume Δ',         v: '+18%',  unit: '',   tone: 'hot' },
+      { k: 'ACR',              v: '0.78',  unit: '' },
+      { k: 'Hard sessions',    v: '1 / 7', unit: '' },
+      { k: 'Days since rest',  v: '2',     unit: 'd' },
+      { k: 'Volume Δ',         v: '−16%',  unit: '' },
     ];
     return (
       <div className="scr">
@@ -216,13 +216,13 @@
             <div className="head">2 rules fired · 19 May</div>
             <div className="scr-sys-rule">
               <span className="dot"></span>
-              <span className="name">Intensity Stack Protect</span>
-              <span className="meta">−1 hard</span>
+              <span className="name">Intensity Headroom Clear</span>
+              <span className="meta">+1 quality</span>
             </div>
             <div className="scr-sys-rule">
               <span className="dot"></span>
-              <span className="name">ACR Ceiling Breach</span>
-              <span className="meta">−6mi</span>
+              <span className="name">Build Window Active</span>
+              <span className="meta">+4mi</span>
             </div>
           </div>
         </div>
