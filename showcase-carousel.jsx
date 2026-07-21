@@ -11,7 +11,7 @@
       num: '01',
       label: 'COMMAND',
       tagline: "Today's directive.",
-      desc: "One screen. One directive. The engine reads your last seven days and writes today's workout against your actual load — not yesterday's intention.",
+      desc: "One screen. One directive. The engine reads your last seven days and writes today's workout against your actual load. Not yesterday's intention.",
       rows: [
         { k: 'Directive', v: 'PUSH' },
         { k: 'Triggers fired', v: '2' },
@@ -44,7 +44,7 @@
       num: '04',
       label: 'SYSTEM',
       tagline: 'Engine status.',
-      desc: 'Six metrics. Two thresholds. One timestamp. The engine shows its work — every evaluation, every time.',
+      desc: 'Six metrics. Two thresholds. One timestamp. The engine shows its work. Every evaluation, every time.',
       rows: [
         { k: 'Metrics tracked', v: '6 core' },
         { k: 'Thresholds', v: 'Deterministic' },
