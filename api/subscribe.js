@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
-  const { firstName, email, goalRace, experienceLevel } = req.body ?? {};
+  const { firstName, email, goalRace, experienceLevel, utm_source, utm_medium, utm_campaign, utm_content } = req.body ?? {};
 
   if (!firstName || !email) {
     return res.status(400).json({ success: false, message: 'Name and email are required' });
@@ -40,6 +40,10 @@ module.exports = async function handler(req, res) {
     if (foundingAthleteNumber !== null) contactPayload.foundingAthleteNumber = foundingAthleteNumber;
     if (goalRace)        contactPayload.goalRace = goalRace;
     if (experienceLevel) contactPayload.experienceLevel = experienceLevel;
+    if (utm_source)      contactPayload.utm_source = utm_source;
+    if (utm_medium)      contactPayload.utm_medium = utm_medium;
+    if (utm_campaign)    contactPayload.utm_campaign = utm_campaign;
+    if (utm_content)     contactPayload.utm_content = utm_content;
 
     console.log('Loops contact request body:', JSON.stringify(contactPayload));
 

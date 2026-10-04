@@ -34,6 +34,29 @@
   })();
 </script>
 
+<!-- Capture UTM parameters on first visit (session-scoped, first-touch) -->
+<script>
+  (function () {
+    try {
+      var KEY = 'tact_utm';
+      if (sessionStorage.getItem(KEY)) return; // first-touch: keep the entry link's attribution
+      var p = new URLSearchParams(window.location.search);
+      var utm = {};
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach(function (f) {
+        var v = p.get(f);
+        if (v) utm[f] = v;
+      });
+      if (Object.keys(utm).length) sessionStorage.setItem(KEY, JSON.stringify(utm));
+    } catch (e) {}
+  })();
+</script>
+
+<!-- Vercel Web Analytics (page views only) -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+
 <!-- Design system tokens + fonts -->
 <link rel="stylesheet" href="design-system/colors_and_type.css" />
 <!-- Page styles -->
@@ -825,6 +848,16 @@
     const level = document.getElementById('f-level').value;
     if (race)  payload.goalRace = race;
     if (level) payload.experienceLevel = level;
+
+    try {
+      const storedUtm = sessionStorage.getItem('tact_utm');
+      if (storedUtm) {
+        const utm = JSON.parse(storedUtm);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach((f) => {
+          if (utm[f]) payload[f] = utm[f];
+        });
+      }
+    } catch (e) {}
 
     try {
       const res = await fetch('/api/subscribe', {
