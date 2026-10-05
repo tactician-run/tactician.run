@@ -1,8 +1,8 @@
 /* =============================================================
    Tactician — Color + Type System
    Decision engine for endurance performance.
-   Dark mode is the default. Light mode flips on .light or via
-   prefers-color-scheme: light.
+   The theme follows the system: :root holds dark, prefers-color-scheme:
+   light swaps in light. [data-theme] pins an explicit visitor choice.
    ============================================================= */
 
 /* ---------- Webfonts ---------- */
@@ -54,7 +54,7 @@
   font-weight: 700; font-style: normal; font-display: swap;
 }
 
-/* ---------- Tokens — DARK MODE (default) ----------
+/* ---------- Tokens — DARK MODE (base tokens; system light overrides below) ----------
    Tactician's canonical mode. Near-black canvas, elevated dark tiles,
    pure-white as the contrast accent for active state. */
 
@@ -108,11 +108,13 @@
   --space-10: 40px;
   --space-12: 48px;
 
-  /* Radius */
-  --radius-chip:   6px;
-  --radius-input:  8px;
-  --radius-card:   10px;
-  --radius-modal:  16px;
+  /* Radius — containers square, touch controls slightly rounded */
+  --radius-control: 6px;   /* buttons, inputs, slide track */
+  --radius-thumb:   4px;   /* a control inside a control */
+  --radius-chip:   var(--radius-control);
+  --radius-input:  var(--radius-control);
+  --radius-card:   0;
+  --radius-modal:  0;
   --radius-pill:   9999px;
 
   /* Type families */

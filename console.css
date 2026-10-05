@@ -1,0 +1,610 @@
+/* console.css — web rebuild of the app's current Command console and Trajectory V2.
+   Mirrors Views/Command/CommandView.swift and Views/Trajectory/TrajectoryView.swift:
+   one continuous surface, full-bleed hairlines, no cards inside a screen, no radii
+   except the slide track and its buttons, numbers always mono. Every color is a token.
+
+   Prefix: .tc-  (shared by the hero console and the showcase screens). */
+
+/* ── Screen frame ──────────────────────────────────────────── */
+.tc-screen {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  display: flex; flex-direction: column;
+  font-feature-settings: "tnum" on;
+}
+.tc-mono {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-feature-settings: "tnum" on;
+}
+
+/* Top chrome — logo + days-to-race + week + ENGINE pulse */
+.tc-chrome {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-base);
+}
+.tc-logo {
+  width: 18px; height: 18px; border: 1px solid var(--text-primary);
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.tc-logo::after { content: ""; width: 6px; height: 6px; background: var(--text-primary); }
+.tc-chrome .name { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.22em; }
+.tc-chrome .sp { flex: 1; }
+.tc-chrome .meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; color: var(--text-dim); text-transform: uppercase; }
+.tc-engine { display: inline-flex; align-items: center; gap: 5px; }
+.tc-dot {
+  width: 5px; height: 5px; border-radius: 999px; background: var(--status-on-track);
+  display: inline-block; flex-shrink: 0;
+}
+.tc-dot.pulse { animation: tcPulse 1.8s ease-in-out infinite alternate; }
+@keyframes tcPulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.35; transform: scale(1.35); } }
+
+/* Bottom nav — three destinations, never more */
+.tc-nav {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  margin-top: auto;
+}
+.tc-nav span {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em;
+  text-align: center; padding: 14px 0 16px; color: var(--text-ghost);
+  position: relative;
+}
+.tc-nav span.on { color: var(--text-primary); font-weight: 600; }
+.tc-nav span.on::before {
+  content: ""; position: absolute; left: 12%; right: 12%; top: -1px; height: 2px; background: var(--text-primary);
+}
+
+/* Generic region + header row */
+.tc-region { border-bottom: 1px solid var(--border); }
+.tc-head {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 12px 16px 0;
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+}
+.tc-head .l { color: var(--text-dim); letter-spacing: 0.2em; }
+.tc-head .r { color: var(--text-ghost); letter-spacing: 0.14em; }
+.tc-head .r.warn, .tc-head .l.warn { color: var(--status-at-risk); }
+.tc-head .r.ok { color: var(--status-on-track); }
+
+.tc-provenance {
+  padding: 11px 16px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
+  color: var(--text-ghost); text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ── COMMAND — decision plane ──────────────────────────────── */
+.tc-plane { background: var(--bg-card); border-bottom: 1px solid var(--border); }
+
+.tc-strip {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+}
+.tc-strip .l { color: var(--text-ghost); letter-spacing: 0.2em; }
+.tc-strip .l b { font-weight: 400; color: var(--status-at-risk); }
+.tc-strip .r { color: var(--text-dim); letter-spacing: 0.08em; white-space: nowrap; }
+
+.tc-hero { padding: 26px 16px 20px; }
+.tc-verb {
+  font-family: var(--font-ui); font-weight: 600;
+  font-size: 64px; line-height: 0.95; letter-spacing: -0.035em;
+  color: var(--status-at-risk);
+  transition: color 0.2s var(--ease-standard);
+}
+.tc-sub {
+  margin-top: 10px;
+  font-size: 15px; font-weight: 500; line-height: 1.4; letter-spacing: -0.015em;
+  color: var(--text-muted);
+}
+.tc-rationale {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--bg-ink);
+  border-left: 2px solid var(--status-at-risk);
+}
+.tc-rationale .lbl {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 600; letter-spacing: 0.18em;
+  color: var(--status-at-risk);
+}
+.tc-rationale p {
+  margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: var(--text-secondary);
+}
+.tc-rationale .num { font-family: var(--font-mono); font-size: 12px; color: var(--text-primary); }
+
+.tc-session-body { padding: 10px 16px 14px; }
+.tc-session-title {
+  font-size: 20px; font-weight: 600; line-height: 1.25; letter-spacing: -0.018em;
+}
+.tc-session-title .num, .tc-session-meta .num { font-family: var(--font-mono); font-weight: 500; }
+.tc-session-title .num { font-size: 18px; }
+.tc-session-meta { margin-top: 5px; font-size: 12px; color: var(--text-muted); }
+.tc-session-meta .num { font-size: 11px; }
+.tc-session-meta s { color: var(--text-dim); }
+
+.tc-thirds {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border-soft);
+}
+.tc-thirds > div { padding: 11px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.tc-thirds > div + div { border-left: 1px solid var(--border-soft); }
+.tc-thirds .k { font-family: var(--font-mono); font-size: 8px; font-weight: 500; letter-spacing: 0.16em; color: var(--text-ghost); text-transform: uppercase; }
+.tc-thirds .v { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--text-primary); white-space: nowrap; }
+.tc-thirds .v small { font-size: 9px; color: var(--text-dim); margin-left: 3px; font-weight: 400; }
+.tc-thirds.lg .v { font-size: 20px; }
+.tc-thirds .v.warn { color: var(--status-at-risk); }
+
+/* Commit controls — slide to apply, WHY / ADJUST / DEFER, KEEP PLAN */
+.tc-commit { padding: 14px 16px 12px; }
+.tc-slide {
+  position: relative; height: 48px;
+  background: var(--bg-ink);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-control);
+  padding: 4px;
+  touch-action: pan-y;
+  user-select: none; -webkit-user-select: none;
+}
+.tc-slide .track-lbl {
+  position: absolute; inset: 0 8px 0 48px;
+  display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: 0.24em;
+  color: var(--text-muted); text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.tc-slide .fill {
+  position: absolute; left: 4px; top: 4px; bottom: 4px; width: 40px;
+  background: color-mix(in oklab, var(--status-at-risk) 16%, transparent);
+  border-radius: var(--radius-thumb);
+  pointer-events: none;
+}
+.tc-thumb {
+  position: relative; z-index: 1;
+  width: 40px; height: 40px; border-radius: var(--radius-thumb);
+  background: var(--text-dim);
+  color: var(--bg-ink);
+  border: none; padding: 0;
+  font-family: var(--font-mono); font-size: 15px; font-weight: 600;
+  cursor: grab;
+  display: grid; place-items: center;
+  will-change: transform;
+}
+.tc-thumb:active { cursor: grabbing; }
+.tc-thumb:focus-visible { outline: 2px solid var(--status-at-risk); outline-offset: 2px; }
+.tc-slide.snap .tc-thumb, .tc-slide.snap .fill { transition: transform 0.28s var(--ease-standard), width 0.28s var(--ease-standard); }
+
+.tc-secondary { display: flex; gap: 6px; margin-top: 8px; }
+.tc-secondary button, .tc-keep {
+  height: 46px; border-radius: var(--radius-control); background: transparent;
+  border: 1px solid var(--border); color: var(--text-primary);
+  font-family: var(--font-ui); text-transform: uppercase; cursor: pointer;
+  transition: background 0.15s var(--ease-standard);
+}
+.tc-secondary button:hover, .tc-keep:hover { background: var(--bg-elevated); }
+.tc-secondary .why { flex: 3; font-size: 12px; font-weight: 600; letter-spacing: 0.2em; }
+.tc-secondary .adj { flex: 2; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; color: var(--text-secondary); }
+.tc-secondary .def { flex: 1.4; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: var(--text-muted); border-color: var(--border-soft); }
+.tc-keep {
+  display: block; width: 100%; height: 40px; margin-top: 6px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.18em; color: var(--text-muted);
+  border-color: var(--border-soft);
+}
+.tc-why-panel {
+  margin-top: 10px; border: 1px solid var(--border-soft); background: var(--bg-ink);
+  padding: 4px 12px;
+}
+.tc-why-panel div {
+  display: flex; justify-content: space-between; gap: 10px; padding: 7px 0;
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text-dim);
+}
+.tc-why-panel div + div { border-top: 1px solid var(--border-soft); }
+.tc-why-panel .fired { color: var(--status-at-risk); }
+.tc-why-panel .pass { color: var(--text-ghost); }
+
+/* States driven by data-state on .tc-console: proposed (default) / applied / kept */
+.tc-console [data-when] { display: none; }
+.tc-console[data-state="proposed"] [data-when~="proposed"],
+.tc-console[data-state="applied"]  [data-when~="applied"],
+.tc-console[data-state="kept"]     [data-when~="kept"] { display: revert; }
+.tc-console[data-state="kept"] .tc-verb { color: var(--status-on-track); }
+.tc-console[data-state="applied"] .tc-thumb { cursor: default; }
+.tc-replay {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 10px; background: none; border: none; padding: 4px 0; cursor: pointer;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--text-dim); text-transform: uppercase;
+}
+.tc-replay:hover { color: var(--text-primary); }
+
+/* Evidence plane — friction + queue rows */
+.tc-rows { padding: 8px 16px 12px; }
+.tc-rows > div {
+  display: flex; justify-content: space-between; gap: 12px; padding: 7px 0;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.tc-rows > div + div { border-top: 1px solid var(--border-soft); }
+.tc-rows .warn { color: var(--status-at-risk); }
+.tc-rows.dim > div { color: var(--text-dim); }
+.tc-rows .sig { display: inline-flex; align-items: center; gap: 8px; }
+.tc-rows .sig::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--status-at-risk); }
+
+/* ── Hero console — the decision plane, standalone ─────────── */
+.tc-hero-console {
+  width: 100%; max-width: 420px; margin-left: auto;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.tc-hero-console .tc-plane { border-bottom: none; }
+.tc-hero-console .tc-provenance { border-top: 1px solid var(--border); background: var(--bg-base); }
+@media (max-width: 920px) { .tc-hero-console { margin: 0 auto; } }
+@media (max-width: 420px) {
+  .tc-verb { font-size: 56px; }
+  .tc-strip .r .tplus { display: none; }
+}
+
+/* ── TRAJECTORY ────────────────────────────────────────────── */
+.tc-label-row {
+  display: flex; justify-content: space-between; padding: 11px 16px;
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+}
+.tc-label-row .l { color: var(--text-ghost); letter-spacing: 0.2em; }
+.tc-label-row .r { color: var(--text-dim); letter-spacing: 0.08em; }
+
+.tc-spine { border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.tc-phases { display: flex; gap: 4px; padding: 14px 16px 0; align-items: flex-end; }
+.tc-phases > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tc-phases i { display: block; height: 3px; background: var(--bg-elevated); position: relative; overflow: hidden; }
+.tc-phases span { font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: 0.12em; color: var(--text-ghost); }
+.tc-phases .done i { background: var(--text-primary); }
+.tc-phases .done span { color: var(--text-muted); }
+.tc-phases .cur i { background: var(--bg-subtle); }
+.tc-phases .cur i::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--p, 50%); background: var(--text-primary); }
+.tc-phases .cur span { color: var(--text-primary); }
+.tc-doctrine { display: flex; gap: 8px; align-items: baseline; padding: 9px 16px 4px; flex-wrap: wrap; }
+.tc-doctrine b { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
+.tc-doctrine span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim); }
+.tc-spine svg { display: block; width: 100%; height: auto; }
+.tc-axis {
+  display: flex; justify-content: space-between; padding: 2px 16px 0;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-ghost);
+}
+.tc-axis .now { color: var(--text-primary); font-weight: 700; letter-spacing: 0.14em; }
+.tc-axis .race { color: var(--status-at-risk); font-weight: 700; }
+.tc-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 9px 16px 0; }
+.tc-legend span {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; color: var(--text-dim);
+}
+.tc-legend i { display: inline-block; width: 14px; }
+.tc-legend .ex { height: 1.6px; background: var(--text-primary); }
+.tc-legend .cp { height: 1.25px; background: var(--status-at-risk); }
+.tc-legend .im { height: 0; border-top: 1px dashed var(--text-ghost); }
+.tc-legend .mu { width: 1.5px; height: 8px; background: var(--status-at-risk); }
+
+.tc-verdict { padding: 8px 16px 16px; }
+.tc-verdict .word {
+  font-size: 44px; font-weight: 600; letter-spacing: -0.035em; line-height: 0.95;
+  color: var(--status-at-risk);
+}
+.tc-verdict .word.ok { color: var(--status-on-track); }
+.tc-verdict .line {
+  margin-top: 10px; font-size: 14px; font-weight: 500; letter-spacing: -0.015em; line-height: 1.4;
+  color: var(--text-muted); max-width: 34ch;
+}
+.tc-thirds.verdict-triple { border-top: 1px solid var(--border-soft); }
+.tc-thirds.verdict-triple .k { font-size: 8.5px; }
+.tc-thirds.verdict-triple .v { font-size: 20px; }
+
+.tc-bars { display: flex; gap: 6px; height: 112px; padding: 12px 16px 0; align-items: flex-end; }
+.tc-bars > div { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; height: 100%; position: relative; }
+.tc-bars i { display: block; background: var(--text-primary); }
+.tc-bars .rest i { height: 3px !important; background: var(--bg-elevated); }
+.tc-bars .ok i { background: var(--status-on-track); }
+.tc-bars .short i { background: var(--status-at-risk); }
+.tc-bars .today i { background: var(--bg-subtle); box-shadow: inset 0 0 0 1.5px var(--text-primary); }
+.tc-bars .today::before {
+  content: "TODAY"; font-family: var(--font-mono); font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--text-primary); text-align: center; margin-bottom: 4px;
+}
+.tc-days { display: flex; gap: 6px; padding: 6px 16px 0; }
+.tc-days span { flex: 1; text-align: center; font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); }
+.tc-days span.on { color: var(--text-primary); font-weight: 700; }
+.tc-readout {
+  margin-top: 8px; border-top: 1px solid var(--border-soft);
+  padding: 10px 16px 12px; display: flex; justify-content: space-between; gap: 10px;
+  font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase;
+}
+.tc-readout .l { color: var(--text-secondary); }
+.tc-readout .r { color: var(--text-primary); white-space: nowrap; }
+
+.tc-exec-fig { display: flex; justify-content: space-between; align-items: flex-end; padding: 8px 16px 0; }
+.tc-exec-fig .v { font-family: var(--font-mono); font-size: 28px; font-weight: 500; line-height: 1; }
+.tc-exec-fig .v small { font-size: 15px; color: var(--text-dim); }
+.tc-exec-fig .r { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; color: var(--text-dim); }
+.tc-strip-bars { display: flex; gap: 2px; padding: 12px 16px; }
+.tc-strip-bars i { flex: 1; height: 5px; background: var(--status-on-track); }
+.tc-strip-bars i.a { background: var(--status-at-risk); }
+.tc-strip-bars i.d { background: var(--status-deviating); }
+.tc-strip-bars i.m { background: var(--text-dim); }
+
+.tc-rules { padding: 10px 16px 12px; }
+.tc-rules > div {
+  display: grid; grid-template-columns: 6px 1fr auto 52px; gap: 9px; align-items: center;
+  padding: 8px 0; border-top: 1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.tc-rules i { width: 6px; height: 6px; border-radius: 999px; background: var(--status-at-risk); }
+.tc-rules .n { color: var(--text-secondary); }
+.tc-rules .c { color: var(--text-primary); }
+.tc-rules .w { font-size: 8.5px; letter-spacing: 0.1em; color: var(--text-ghost); text-align: right; }
+.tc-rules .zero i { background: var(--text-ghost); }
+.tc-rules .zero .n, .tc-rules .zero .c { color: var(--text-dim); }
+
+/* ── REVIEW ────────────────────────────────────────────────── */
+.tc-cats { padding: 4px 16px 10px; }
+.tc-cats > div {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline;
+  padding: 9px 0; border-top: 1px solid var(--border-soft);
+}
+.tc-cats .n { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--text-secondary); text-transform: uppercase; }
+.tc-cats .n small { color: var(--text-ghost); margin-left: 6px; letter-spacing: 0.08em; }
+.tc-cats .p { font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+.tc-cats .w { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; min-width: 92px; text-align: right; }
+.tc-cats .ok { color: var(--status-on-track); }
+.tc-cats .warn { color: var(--status-at-risk); }
+.tc-pvr { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 12px 16px 0; height: 76px; align-items: end; }
+.tc-pvr > div { position: relative; height: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.tc-pvr .pl { position: absolute; bottom: 0; left: 0; right: 0; border: 1px dashed var(--text-ghost); border-bottom: none; }
+.tc-pvr .ex { width: 55%; background: var(--text-primary); position: relative; }
+.tc-pvr .ex.short { background: var(--status-at-risk); }
+
+/* ── SYSTEM ────────────────────────────────────────────────── */
+.tc-gauge { padding: 10px 16px 14px; }
+.tc-gauge .row { display: flex; justify-content: space-between; align-items: baseline; }
+.tc-gauge .v { font-family: var(--font-mono); font-size: 28px; font-weight: 500; color: var(--status-at-risk); }
+.tc-gauge .band { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; color: var(--text-dim); }
+.tc-gauge .bar { position: relative; height: 4px; background: var(--bg-elevated); margin-top: 12px; }
+.tc-gauge .bar .ok-band { position: absolute; top: 0; bottom: 0; background: color-mix(in oklab, var(--status-on-track) 35%, transparent); }
+.tc-gauge .bar .mark { position: absolute; top: -4px; width: 2px; height: 12px; background: var(--status-at-risk); }
+.tc-gauge .scale { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; color: var(--text-ghost); }
+.tc-kv { padding: 4px 16px 10px; }
+.tc-kv > div {
+  display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim);
+}
+.tc-kv .v { color: var(--text-primary); text-align: right; }
+.tc-kv .v.warn { color: var(--status-at-risk); }
+.tc-kv .v.ok { color: var(--status-on-track); }
+
+/* ── Showcase stage sizing ─────────────────────────────────── */
+.cx-phone-inner .tc-screen { min-height: 100%; }
+.cx-phone-inner { height: 720px !important; overflow-y: auto !important; overscroll-behavior: contain; scrollbar-width: thin; }
+.cx-tab:focus-visible { outline: 2px solid var(--text-primary); outline-offset: -4px; }
+@media (max-width: 600px) { .cx-phone-inner { height: 640px !important; } }
+
+/* Directive pills follow the app's tone map: PROCEED on-track, MODIFY/REDUCE/PUSH at-risk, REST muted */
+.frag-pill.ok { color: var(--status-on-track); border-color: color-mix(in oklab, var(--status-on-track) 50%, transparent); }
+
+/* Feature 03 sparkline — spine strokes: executed primary 1.6, current plan at-risk 1.25, as imported ghost dashed */
+.frag-sparkline .plan-line { stroke: var(--text-ghost) !important; stroke-width: 1 !important; stroke-dasharray: 3 3; fill: none; }
+.frag-sparkline .fwd-line { stroke: var(--status-at-risk); stroke-width: 1.25; fill: none; }
+.frag-sparkline .actual-line { stroke: var(--text-primary) !important; stroke-width: 1.6 !important; fill: none; }
+.frag-sparkline-legend { flex-wrap: wrap; gap: 8px 16px !important; }
+.frag-sparkline-legend .swatch.fwd { border-top: 1.25px solid var(--status-at-risk); }
+.frag-sparkline-legend .swatch.plan { border-top: 1px dashed var(--text-ghost) !important; opacity: 1 !important; }
+.frag-sparkline-legend .swatch.actual { border-top-width: 1.6px !important; }
+.frag-sparkline-axis {
+  position: relative; height: 14px; margin-top: 4px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; color: var(--text-ghost); text-transform: uppercase;
+}
+.frag-sparkline-axis span { position: absolute; top: 0; white-space: nowrap; }
+.frag-sparkline-axis .now { left: 65%; transform: translateX(-50%); color: var(--text-primary); font-weight: 700; }
+.frag-sparkline-axis .race { right: 0; color: var(--status-at-risk); font-weight: 700; }
+.frag-sparkline-wrap .pin { display: none; }
+
+/* PUSH is an adjusted directive: at-risk, never on-track (CommandView tone map) */
+.step-block .sb-directive-word { color: var(--status-at-risk); margin-top: 10px; }
+
+/* Grid children default to min-width:auto, so the console's nowrap mono rows would
+   push the hero column wider than a phone. Let the column shrink; the rows ellipsize. */
+.hero-grid > * { min-width: 0; }
+.tc-strip .r { overflow: hidden; text-overflow: ellipsis; }
+.cx-stage > * { min-width: 0; }
+.cx-desc ul li .v { text-align: right; }
+@media (max-width: 600px) { .cx-desc ul li { grid-template-columns: auto 1fr; } }
+/* The state switch resets display to the element's default; the track label is a grid. */
+.tc-console[data-state="proposed"] .track-lbl[data-when~="proposed"],
+.tc-console[data-state="applied"] .track-lbl[data-when~="applied"] { display: grid; }
+
+/* ══ Modules ══════════════════════════════════════════════════
+   A short module per screen instead of the whole phone. Depth comes from the
+   background stack and hairlines only (no shadows in the system):
+     page  bg-base   →  panel  bg-raised  →  module  bg-card  →  inset  (darker in dark, recessed in light)
+   Status is carried by the colored verdict text alone, never by the module edge. */
+:root { --tc-inset: var(--bg-ink); }
+:root[data-theme="light"] { --tc-inset: var(--bg-elevated); }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { --tc-inset: var(--bg-elevated); }
+}
+
+.tc-module {
+  position: relative;
+  width: 100%; max-width: 460px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-feature-settings: "tnum" on;
+}
+
+/* Header strip sits one step below the card, so the content reads as the raised layer */
+.tc-module .tc-strip, .tc-mod-head { background: var(--bg-raised); }
+.tc-mod-head {
+  display: flex; justify-content: space-between; gap: 12px; padding: 13px 16px 11px;
+  border-bottom: 1px solid var(--border-soft);
+  font-family: var(--font-mono); font-size: 9px; text-transform: uppercase;
+}
+.tc-mod-head .l { color: var(--text-dim); letter-spacing: 0.2em; }
+.tc-mod-head .r { color: var(--text-dim); letter-spacing: 0.1em; }
+.tc-module .tc-strip { padding-top: 13px; }
+.tc-module .tc-provenance { border-top: 1px solid var(--border-soft); background: var(--bg-raised); }
+
+.tc-rationale { background: var(--tc-inset); }
+.tc-slide { background: var(--tc-inset); }
+.tc-why-panel { background: var(--tc-inset); }
+
+.tc-session-row {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding: 12px 16px 14px; border-top: 1px solid var(--border-soft);
+}
+.tc-session-row .tc-session-title { font-size: 18px; }
+.tc-session-row .tc-session-title .num { font-size: 16px; }
+.tc-session-delta {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-ghost); padding-top: 5px; white-space: nowrap;
+}
+.tc-session-delta.warn { color: var(--status-at-risk); }
+.tc-module .tc-commit { border-top: 1px solid var(--border-soft); padding-bottom: 14px; }
+.tc-module .tc-hero { padding: 22px 16px 18px; }
+.tc-module .tc-secondary button { height: 40px; }
+.tc-module .tc-secondary .def { flex: 2; font-size: 10px; letter-spacing: 0.16em; }
+.tc-module .tc-verdict { padding-top: 14px; }
+.tc-module .tc-spine { border-top: none; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px; }
+.tc-module .tc-thirds.verdict-triple { border-bottom: none; }
+.tc-module .tc-cats-wrap { border-top: 1px solid var(--border-soft); border-bottom: none; }
+.tc-module .tc-region:last-of-type { border-bottom: none; }
+
+/* Hero placement */
+.tc-hero-console.tc-module { max-width: 420px; margin-left: auto; }
+@media (max-width: 920px) { .tc-hero-console.tc-module { margin: 0 auto; } }
+
+/* Showcase: the module replaces the phone frame */
+.cx-module-slot { display: flex; justify-content: flex-start; width: 100%; }
+@media (max-width: 1100px) { .cx-module-slot { justify-content: center; order: 1; } }
+
+/* System panel: the features grid is a raised panel on the page, so its fragments
+   and the modules around it read as distinct layers rather than one flat canvas. */
+.features-grid, .feature { background: var(--bg-raised); }
+
+/* ── Corners: square, everywhere a card or panel is drawn ─────────
+   The app's console regions are full-bleed with no radii, and the site's structural
+   pieces (features grid, offer card, tabs, buttons, form) were already square. Only
+   the controls inside a module keep the app's small control radius (track 6, thumb 4). */
+.tc-module, .problem-card, .step-block { border-radius: 0; }
+
+/* ── Slide thumb: 40pt thumb + 4pt padding each side + 1pt border = 50pt track.
+   At 48 the thumb overflowed the padding box by 2pt and sat low. */
+.tc-slide { height: 50px; }
+.tc-slide .fill { top: 4px; bottom: 4px; }
+.tc-thumb { line-height: 0; }
+.tc-thumb svg { display: block; }
+
+/* ══ Slide to apply: the commit ritual ═══════════════════════════
+   Phases and colors from SlideToConfirmButton.swift; track color from Theme.commitTrack,
+   which is black in both modes (bg-ink in dark, bg-active in light). The track's
+   contents are read against that black, so they use the track-scoped tokens below. */
+:root {
+  --tc-commit-track: var(--bg-ink);
+  --tc-track-text: var(--text-muted);      /* #A8A8A4 on black */
+  --tc-track-thumb: var(--text-dim);       /* #757570 */
+  --tc-track-bright: var(--text-primary);  /* near-white on black */
+  --tc-on-status: var(--bg-ink);           /* near-black on amber */
+}
+:root[data-theme="light"] {
+  --tc-commit-track: var(--bg-active);
+  --tc-track-text: var(--text-dim);
+  --tc-track-thumb: var(--text-muted);
+  --tc-track-bright: var(--text-on-active);
+  --tc-on-status: var(--text-primary);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --tc-commit-track: var(--bg-active);
+    --tc-track-text: var(--text-dim);
+    --tc-track-thumb: var(--text-muted);
+    --tc-track-bright: var(--text-on-active);
+    --tc-on-status: var(--text-primary);
+  }
+}
+
+.tc-slide {
+  background: var(--tc-commit-track);
+  border-color: var(--tc-commit-track);
+  overflow: hidden;
+  transition: background 0.3s var(--ease-standard), border-color 0.3s var(--ease-standard);
+}
+.tc-slide .track-lbl {
+  display: flex !important; align-items: center; justify-content: center; gap: 8px;
+  color: var(--tc-track-text);
+  transition: color 0.2s var(--ease-standard), inset 0.3s var(--ease-standard);
+}
+.tc-slide .track-lbl .glyph { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; line-height: 1; }
+.tc-slide[data-phase="idle"] .track-lbl .glyph, .tc-slide[data-phase="dragging"] .track-lbl .glyph { display: none; }
+.tc-slide .fill { background: color-mix(in oklab, var(--tc-track-bright) 10%, transparent); }
+.tc-thumb { background: var(--tc-track-thumb); color: var(--tc-commit-track); }
+.tc-thumb .check { display: none; }
+
+/* dragging */
+.tc-slide[data-phase="dragging"] .track-lbl { color: var(--tc-track-bright); }
+
+/* locked — thumb seats at the end, checks, the board engages */
+.tc-slide[data-phase="locked"] .tc-thumb { background: var(--tc-track-bright); color: var(--tc-commit-track); }
+.tc-slide[data-phase="locked"] .tc-thumb svg:first-child { display: none; }
+.tc-slide[data-phase="locked"] .tc-thumb .check { display: block; }
+.tc-slide[data-phase="locked"] .track-lbl { color: var(--tc-track-bright); }
+.tc-slide[data-phase="locked"] .track-lbl .glyph::before { content: "\25A3"; }
+
+/* updating — amber, thumb gone, a scan sweeps the track */
+.tc-slide[data-phase="updating"] { background: var(--status-at-risk); border-color: var(--status-at-risk); }
+.tc-slide[data-phase="updating"] .track-lbl { color: var(--tc-on-status); inset: 0 8px; }
+.tc-slide[data-phase="updating"] .track-lbl .glyph::before { content: "\25D4"; display: inline-block; animation: tcSpin 0.9s linear infinite; }
+.tc-slide[data-phase="updating"]::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--tc-on-status) 13%, transparent), transparent);
+  background-size: 40% 100%; background-repeat: no-repeat;
+  animation: tcScan 1.4s linear infinite;
+  pointer-events: none;
+}
+/* committed — green, target locked */
+.tc-slide[data-phase="committed"] { background: var(--status-on-track); border-color: var(--status-on-track); }
+.tc-slide[data-phase="committed"] .track-lbl { color: var(--text-on-active); inset: 0 8px; }
+.tc-slide[data-phase="committed"] .track-lbl .glyph::before { content: "\25CF"; }
+.tc-slide[data-phase="updating"] .tc-thumb, .tc-slide[data-phase="updating"] .fill,
+.tc-slide[data-phase="committed"] .tc-thumb, .tc-slide[data-phase="committed"] .fill { display: none; }
+@keyframes tcScan { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+@keyframes tcSpin { to { transform: rotate(360deg); } }
+
+/* The proposal's other answers retire the moment the slide locks (app: !directiveAccepted) */
+.tc-console.is-committing .tc-secondary,
+.tc-console.is-committing .tc-why-panel { display: none !important; }
+
+/* The new plan lands: the session row flashes once as it loads */
+.tc-session-row.is-loaded { animation: tcLoaded 0.9s var(--ease-standard); }
+@keyframes tcLoaded { from { background: color-mix(in oklab, var(--status-on-track) 14%, transparent); } to { background: transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .tc-slide[data-phase="updating"]::after, .tc-slide[data-phase="updating"] .track-lbl .glyph::before { animation: none; }
+}
+
+/* The hidden attribute always wins over a component display rule. */
+[hidden] { display: none !important; }
+
+/* Founding price: the number is data, so it is mono (a number in Inter Tight is a bug) */
+.founding-rate .fr-price { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 6px; }
+.founding-rate .fr-price .amt {
+  font-family: var(--font-mono); font-weight: 500; font-size: clamp(40px, 4.4vw, 56px);
+  letter-spacing: -0.03em; line-height: 1; color: var(--text-primary); font-feature-settings: "tnum" on;
+}
+.founding-rate .fr-price .per { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; color: var(--text-dim); text-transform: uppercase; }
+.founding-rate .fr-list li .v s { color: var(--text-dim); }
