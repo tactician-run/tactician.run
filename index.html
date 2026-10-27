@@ -60,28 +60,37 @@
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 
-<!-- Microsoft Clarity (Production only). /api/clarity returns null outside Production,
-     so nothing loads in local dev or Preview. Async fetch + async script: never blocks paint. -->
+<!-- Microsoft Clarity (Production only, opt-in). Nothing loads until the visitor accepts the
+     consent banner; Global Privacy Control counts as a decline. /api/clarity returns null
+     outside Production, so nothing loads in local dev or Preview either. -->
 <script>
   (function () {
-    try {
-      if (!window.fetch) return;
-      fetch('/api/clarity', { credentials: 'omit' })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (cfg) {
-          var id = cfg && cfg.projectId;
-          if (!id) return;
-          // Official Clarity loader (same as @microsoft/clarity injectScript)
-          (function (c, l, a, r, i, t, y) {
-            if (l.getElementById('clarity-script')) return;
-            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-            t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
-            t.id = 'clarity-script';
-            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-          })(window, document, 'clarity', 'script', id);
-        })
-        .catch(function () {});
-    } catch (e) {}
+    var KEY = 'tact-consent';
+    function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
+    window.tactConsent = {
+      get: function () { return navigator.globalPrivacyControl ? 'denied' : stored(); },
+      set: function (v) { try { localStorage.setItem(KEY, v); } catch (e) {} },
+      loadClarity: function () {
+        if (!window.fetch) return;
+        fetch('/api/clarity', { credentials: 'omit' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (cfg) {
+            var id = cfg && cfg.projectId;
+            if (!id) return;
+            // Official Clarity loader (same as @microsoft/clarity injectScript)
+            (function (c, l, a, r, i, t, y) {
+              if (l.getElementById('clarity-script')) return;
+              c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+              t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+              t.id = 'clarity-script';
+              y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+            })(window, document, 'clarity', 'script', id);
+            window.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'granted' });
+          })
+          .catch(function () {});
+      }
+    };
+    if (window.tactConsent.get() === 'granted') window.tactConsent.loadClarity();
   })();
 </script>
 
@@ -92,10 +101,9 @@
 <!-- App console rebuild: hero decision plane + showcase screens -->
 <link rel="stylesheet" href="console.css" />
 
-<!-- React + Babel for embedded iOS app screens -->
-<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<!-- React for the embedded app screens. Self-hosted so no visitor IP reaches a third-party CDN. -->
+<script src="vendor/react.production.min.js"></script>
+<script src="vendor/react-dom.production.min.js"></script>
 
 <style>
   /* Tact pulse keyframe used by StatusDot inside the embedded screens */
@@ -614,6 +622,8 @@
           </ul>
         </div>
 
+        <p class="offer-terms">Planned launch prices in USD; your App Store sets local prices. Auto-renewing subscription: after the 21-day free trial it renews each month or year at the price shown until you cancel in your Apple ID settings, at least 24 hours before the period ends. <a href="/terms#subscriptions">Subscription terms</a>.</p>
+
         <a href="#waitlist" class="btn btn-primary offer-cta">
           <span>Join Waitlist</span>
           <span class="arrow">→</span>
@@ -670,7 +680,7 @@
       <div class="form-error-row" id="waitlist-error-bar" role="alert" style="display:none;"></div>
       <div class="final-submit">
         <div class="pact">
-          By joining you agree to the Privacy Notice.
+          By joining you confirm you are 16 or older and agree to the <a href="/privacy">Privacy Notice</a>.
         </div>
         <button type="submit" id="waitlist-submit">
           <span>Join Waitlist</span>
@@ -696,13 +706,14 @@
       <div class="tag">Training execution engine · Built for runners · 2026</div>
     </div>
     <div class="foot-links">
-      <a href="#" id="contact-link">Contact</a>
-      <a href="#" id="privacy-link">Privacy</a>
-      <a href="#" id="terms-link">Terms</a>
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="#" id="cookie-settings-link">Cookies</a>
       <a href="https://www.instagram.com/tactician.run/" target="_blank" rel="noopener noreferrer">Instagram</a>
     </div>
     <div class="foot-meta">
-      <span>v0.9.4 · build a8e2</span>
+      <span>v1.1.0</span>
       <div class="theme-toggle" id="theme-toggle" role="group" aria-label="Display mode">
         <button class="tt-opt" data-val="system">System</button>
         <button class="tt-opt" data-val="dark">Dark</button>
@@ -713,100 +724,9 @@
 </footer>
 
 <!-- ─────────────────────────  APP CODE  ─────────────────────────── -->
-<!-- Coded carousel for the product showcase (the only JSX the page renders) -->
-<script type="text/babel" src="showcase-carousel.jsx"></script>
-
-<!-- ── Contact modal ───────────────────────────── -->
-<div id="contact-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Contact">
-  <div class="modal-card">
-    <button class="modal-close" id="contact-close" aria-label="Close contact modal">×</button>
-    <div class="modal-label">Contact</div>
-    <p class="modal-body">For questions about Tactician or the waitlist, reach out directly.</p>
-    <a href="mailto:hello@tactician.run" class="modal-email">hello@tactician.run</a>
-  </div>
-</div>
-
-<!-- ── Privacy modal ──────────────────────────────────────── -->
-<div id="privacy-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title">
-  <div class="modal-card modal-card--legal">
-    <button class="modal-close" id="privacy-close" aria-label="Close privacy notice">×</button>
-    <div class="modal-label">Legal</div>
-    <div class="modal-legal-scroll">
-      <h2 class="modal-legal-h1" id="privacy-modal-title">Privacy Notice</h2>
-      <div class="modal-legal-meta">Last updated · October 2026</div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">What We Collect</div>
-        <p>When you join the waitlist, we collect your name, email address, and optionally your goal race and experience level. If you arrived from a tagged link, we also store which campaign it was (UTM source, medium, campaign, content).</p>
-        <p>When you browse the site, Microsoft Clarity records how you use it: pages viewed, scrolling, clicks, and mouse movement, along with your device type, browser, and approximate location. Anything you type into the waitlist form is masked in your browser and never sent to Clarity.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Why</div>
-        <p>To manage the waitlist and contact you about Tactician's launch. We will not email you for any other purpose. Clarity data shows us how visitors use the site, so we can improve it.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Who Sees It</div>
-        <p>Your data is processed by <a href="https://loops.so" target="_blank" rel="noopener">Loops</a> (our email service provider, US-based) and stored on servers provided by Vercel (our hosting provider). No one else has access to your waitlist details. We do not sell your personal information.</p>
-        <p>Site usage data is collected by Microsoft Clarity. Microsoft operates Clarity as an independent controller and handles that data under the <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.</p>
-        <p>There are no advertising pixels on this site. We use Vercel Web Analytics to count page views; it is cookieless and does not identify you across sites. Clarity sets two first-party cookies (_clck and _clsk) to link the pages you view in one visit. For visitors in the EEA, UK, and Switzerland, Clarity does not set these cookies.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Legal Basis</div>
-        <p>We collect and use your information based on your consent at the point of signup. Submitting the form is your affirmative action. You can withdraw at any time.</p>
-        <p>Clarity usage data is collected based on our legitimate interest in understanding how the site is used and improving it.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Retention</div>
-        <p>We hold your data until Tactician launches or until you unsubscribe, whichever comes first. If you request deletion, we will remove your record within 30 days.</p>
-        <p>Clarity recordings are deleted after 30 days. Recordings we save, and a random sample Clarity keeps, last up to 9 months. Clarity cannot delete a single visitor's recordings on request, so they expire on this schedule.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Your Rights</div>
-        <p>Under applicable U.S. privacy law, including the California Consumer Privacy Act (CCPA) where applicable, you have the right to access, correct, or delete the personal data we hold about you. To exercise any of these rights, email us at <a href="mailto:hello@tactician.run">hello@tactician.run</a>. We will respond within 30 days.</p>
-        <p>To opt out of Clarity, turn on Global Privacy Control in your browser, use the Digital Advertising Alliance opt-out at <a href="https://optout.aboutads.info/" target="_blank" rel="noopener">optout.aboutads.info</a> (select Microsoft), or block clarity.ms with a content blocker. The site works the same either way.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Contact</div>
-        <p>Questions about this notice: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── Terms modal ────────────────────────────────────────── -->
-<div id="terms-modal" class="modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title">
-  <div class="modal-card modal-card--legal">
-    <button class="modal-close" id="terms-close" aria-label="Close terms of use">×</button>
-    <div class="modal-label">Legal</div>
-    <div class="modal-legal-scroll">
-      <h2 class="modal-legal-h1" id="terms-modal-title">Terms of Use</h2>
-      <div class="modal-legal-meta">Last updated · May 2026</div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">What This Site Is</div>
-        <p>tactician.run is a pre-launch information and waitlist site. No product is currently available for purchase or download. Joining the waitlist is an expression of interest. It creates no contractual obligation on your part or ours.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Pricing</div>
-        <p>Prices shown on this site ($49.99 per year for founding athletes; $69.99 per year or $9.99 per month standard) are planned launch prices, not a binding offer. The founding rate holds for as long as the subscription stays active; cancelling and resubscribing later is at the standard price. Final prices are confirmed in the App Store at launch, and any purchase is governed by separate terms issued at that time.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Content</div>
-        <p>All content on this site, including text, branding, and product descriptions, is owned by Tactician. You may not reproduce or redistribute any part of it without written permission.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Availability</div>
-        <p>This site is provided as-is. We make no guarantees about uptime, accuracy, or continuity. We may change or remove content at any time without notice.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Governing Law</div>
-        <p>These terms are governed by the laws of the United States of America. Any disputes will be subject to the exclusive jurisdiction of the American courts.</p>
-      </div>
-      <div class="modal-legal-section">
-        <div class="modal-legal-section-label">Contact</div>
-        <p>Questions: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Coded carousel for the product showcase. Compiled from showcase-carousel.jsx by
+     `npm run compile`; edit the .jsx and recompile, never the .js. -->
+<script src="showcase-carousel.js"></script>
 
 <script>
   // ── Nav scroll state
@@ -986,58 +906,6 @@
     }
   });
 
-  // ── Contact modal
-  (function () {
-    const overlay   = document.getElementById('contact-modal');
-    const openBtn   = document.getElementById('contact-link');
-    const closeBtn  = document.getElementById('contact-close');
-    if (!overlay || !openBtn) return;
-
-    function openModal()  {
-      overlay.classList.add('is-open');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      closeBtn.focus();
-    }
-    function closeModal() {
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      openBtn.focus();
-    }
-
-    openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
-  })();
-
-  // ── Legal modals (Privacy + Terms)
-  ['privacy', 'terms'].forEach(id => {
-    const overlay  = document.getElementById(id + '-modal');
-    const openBtn  = document.getElementById(id + '-link');
-    const closeBtn = document.getElementById(id + '-close');
-    if (!overlay || !openBtn) return;
-
-    function openModal()  {
-      overlay.classList.add('is-open');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      closeBtn.focus();
-    }
-    function closeModal() {
-      overlay.classList.remove('is-open');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      openBtn.focus();
-    }
-
-    openBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(); });
-    closeBtn.addEventListener('click', closeModal);
-    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal(); });
-  });
-
   // ── Command console (hero + showcase): slide to apply / keep plan / why · adjust · defer
   // Mirrors CommandView: a proposal changes nothing until the athlete slides it home.
   (function () {
@@ -1203,5 +1071,48 @@
   })();
 </script>
 
+
+<!-- ── Consent banner (opt-in for Clarity) ───────────────────── -->
+<div class="consent" id="consent" role="dialog" aria-live="polite" aria-labelledby="consent-title" hidden>
+  <div class="consent-inner">
+    <div class="consent-copy">
+      <div class="consent-label" id="consent-title">Session recording</div>
+      <p>With your permission, Microsoft Clarity records how you move through this site (pages, scrolling, clicks, mouse movement) so we can improve it, and sets two cookies to do so. Form entries are never recorded. Nothing is recorded unless you accept. <a href="/privacy#site">Privacy Notice</a></p>
+    </div>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn" data-consent="denied">Decline</button>
+      <button type="button" class="consent-btn" data-consent="granted">Accept</button>
+    </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var el = document.getElementById('consent');
+    var gpc = !!navigator.globalPrivacyControl;
+    function show() { el.hidden = false; }
+    if (!gpc && !window.tactConsent.get()) show();
+    el.addEventListener('click', function (e) {
+      var v = e.target.getAttribute && e.target.getAttribute('data-consent');
+      if (!v) return;
+      var was = window.tactConsent.get();
+      window.tactConsent.set(v);
+      el.hidden = true;
+      if (v === 'granted') window.tactConsent.loadClarity();
+      else if (was === 'granted') location.reload(); // unload Clarity
+    });
+    document.getElementById('cookie-settings-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (gpc) { alertGpc(); return; }
+      show();
+    });
+    function alertGpc() {
+      el.hidden = false;
+      el.querySelector('.consent-copy p').textContent =
+        'Your browser sends Global Privacy Control, so session recording stays off.';
+      el.querySelector('.consent-actions').innerHTML =
+        '<button type="button" class="consent-btn" data-consent="denied">Close</button>';
+    }
+  })();
+</script>
 </body>
 </html>

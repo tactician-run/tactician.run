@@ -92,6 +92,10 @@
       text-decoration: none;
     }
     .legal-section a:hover { text-decoration: underline; }
+    .legal-section ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
+    .legal-section li + li { margin-top: 6px; }
+    .legal-section h2 { font-family: var(--font-ui); font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 12px; }
+    .legal-part { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-primary); border-top: 1px solid var(--border); padding-top: 24px; margin: 56px 0 32px; }
     .legal-foot {
       border-top: 1px solid var(--border);
       padding: clamp(24px, 3vw, 40px) var(--gutter);
@@ -124,7 +128,7 @@
 <body>
 
   <nav class="legal-nav">
-    <a href="index.html" class="nav-brand">
+    <a href="/" class="nav-brand">
       <span class="glyph" aria-hidden="true"></span>
       <span>Tactician</span>
     </a>
@@ -133,43 +137,71 @@
   <main class="legal-main">
     <div class="legal-page-label"><span class="dot"></span> Legal</div>
     <h1 class="legal-h1">Terms of Use</h1>
-    <div class="legal-meta">Last updated · May 2026</div>
+    <div class="legal-meta">Last updated · October 2026</div>
 
     <div class="legal-section">
-      <div class="legal-section-label">What This Site Is</div>
-      <p>tactician.run is a pre-launch information and waitlist site. No product is currently available for purchase or download. Joining the waitlist is an expression of interest. It creates no contractual obligation on your part or ours.</p>
+      <div class="legal-section-label">These Terms</div>
+      <p>These terms cover tactician.run and the Tactician iOS app. The app is not yet on sale. Until it is, this site is a pre-launch information and waitlist site, and joining the waitlist creates no obligation on your part or ours. When the app is available, your use of it is also governed by Apple's <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Licensed Application End User License Agreement</a>.</p>
+    </div>
+
+    <div class="legal-section" id="subscriptions">
+      <div class="legal-section-label">Subscriptions and Automatic Renewal</div>
+      <p><strong>Tactician is an automatically renewing subscription.</strong> Planned launch prices, in US dollars:</p>
+      <ul>
+        <li>Monthly: $9.99, billed every month</li>
+        <li>Annual: $69.99, billed every year</li>
+        <li>Founding rate: $49.99 a year, for the 100 founding athletes. It holds for as long as the subscription stays active; cancelling and resubscribing later is at the standard price</li>
+      </ul>
+      <p>Prices outside the US are set by the App Store in your local currency. The prices you agree to are the ones shown in the App Store at the moment you subscribe.</p>
+      <p><strong>Free trial.</strong> New subscribers get a 21-day free trial. Unless you cancel at least 24 hours before the trial ends, it converts to the paid plan you chose and your Apple ID is charged on the day it ends.</p>
+      <p><strong>Renewal.</strong> Your subscription renews automatically at the end of each month or year, at the price then in effect, until you cancel. Apple charges your Apple ID within 24 hours before each period ends.</p>
+      <p><strong>Cancelling.</strong> Cancel at any time on your iPhone in Settings → your name → Subscriptions, or at <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener">apps.apple.com/account/subscriptions</a>. Cancel at least 24 hours before the period ends to avoid the next charge. You keep access until the end of the period you have paid for. Deleting your Tactician account does not cancel the subscription.</p>
+      <p><strong>Price changes.</strong> We will tell you before a price change reaches you, and Apple asks for your agreement where the law requires it. A founding athlete's rate is never raised while their subscription stays active.</p>
+      <p><strong>Refunds.</strong> Apple handles all payments and refunds. Request one at <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.</p>
     </div>
 
     <div class="legal-section">
-      <div class="legal-section-label">Pricing</div>
-      <p>Any pricing shown on this site is indicative only. It is not a binding offer. Pricing will be confirmed at the time of launch, and any purchase agreement will be governed by separate terms issued at that time.</p>
+      <div class="legal-section-label">Training at Your Own Risk</div>
+      <p>Tactician prescribes training sessions from deterministic rules applied to your plan and your Strava data. It is not medical advice and does not know about injuries, illness or anything else Strava does not record. Talk to a doctor before starting or changing a training programme, stop if something hurts, and use your own judgement on every session. You run at your own risk.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Your Account</div>
+      <p>Keep your sign-in secure; you are responsible for activity on your account. You can delete your account at any time in the app. We may suspend an account used to abuse the service, interfere with it, or break the law.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Strava</div>
+      <p>Tactician reads your activities through Strava's API with your authorisation. Tactician is not affiliated with or endorsed by Strava. Your use of Strava is governed by Strava's own terms.</p>
     </div>
 
     <div class="legal-section">
       <div class="legal-section-label">Content</div>
-      <p>All content on this site, including text, branding, and product descriptions, is owned by Tactician. You may not reproduce or redistribute any part of it without written permission.</p>
+      <p>All content on this site and in the app, including text, branding and product descriptions, is owned by Tactician. You may not reproduce or redistribute any part of it without written permission. Your training data stays yours.</p>
     </div>
 
     <div class="legal-section">
-      <div class="legal-section-label">Availability</div>
-      <p>This site is provided as-is. We make no guarantees about uptime, accuracy, or continuity. We may change or remove content at any time without notice.</p>
+      <div class="legal-section-label">Availability and Liability</div>
+      <p>The site and app are provided as they are. We work to keep them accurate and running, but make no guarantee of uptime, accuracy or continuity, and may change or remove features. To the extent the law allows, Tactician is not liable for indirect or consequential loss. Nothing in these terms limits rights you have under consumer law that cannot be waived.</p>
     </div>
 
     <div class="legal-section">
       <div class="legal-section-label">Governing Law</div>
-      <p>These terms are governed by the laws of Portugal. Any disputes will be subject to the exclusive jurisdiction of the Portuguese courts.</p>
+      <p>These terms are governed by the laws of Portugal, and disputes are subject to the jurisdiction of the Portuguese courts. If you are a consumer, you also keep the protection of the mandatory laws of the country where you live.</p>
     </div>
 
     <div class="legal-section">
       <div class="legal-section-label">Contact</div>
       <p>Questions: <a href="mailto:hello@tactician.run">hello@tactician.run</a></p>
     </div>
+
   </main>
 
   <footer class="legal-foot">
     <div class="legal-foot-links">
-      <a href="index.html">← tactician.run</a>
-      <a href="privacy.html">Privacy Notice</a>
+      <a href="/">← tactician.run</a>
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy Notice</a>
       <a class="current" aria-current="page">Terms of Use</a>
     </div>
     <span class="legal-foot-copy">© 2026 Tactician</span>

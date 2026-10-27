@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support | Tactician</title>
+  <link rel="stylesheet" href="design-system/colors_and_type.css" />
+  <link rel="stylesheet" href="landing.css" />
+  <style>
+    /* Legal page layout — extends landing.css */
+    .legal-nav {
+      padding: 0 var(--gutter);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-nav .nav-brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--font-ui);
+      font-size: 17px; font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .legal-nav .nav-brand .glyph {
+      width: 22px; height: 22px;
+      border: 1px solid currentColor;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .legal-nav .nav-brand .glyph::after {
+      content: "";
+      width: 7px; height: 7px; background: currentColor;
+    }
+    .legal-main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: clamp(48px, 6vw, 80px) var(--gutter) clamp(80px, 10vw, 120px);
+    }
+    .legal-page-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .legal-page-label .dot {
+      width: 5px; height: 5px; background: var(--text-muted); border-radius: 999px;
+    }
+    .legal-h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .legal-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 56px;
+    }
+    .legal-section {
+      margin-bottom: 40px;
+    }
+    .legal-section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-section p {
+      font-family: var(--font-ui);
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .legal-section p + p { margin-top: 12px; }
+    .legal-section a {
+      color: var(--status-at-risk);
+      text-decoration: none;
+    }
+    .legal-section a:hover { text-decoration: underline; }
+    .legal-section ul { margin: 12px 0 0; padding-left: 20px; color: var(--text-secondary); font-size: 16px; line-height: 1.7; }
+    .legal-section li + li { margin-top: 6px; }
+    .legal-section h2 { font-family: var(--font-ui); font-size: 20px; font-weight: 600; color: var(--text-primary); margin: 0 0 12px; }
+    .legal-part { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-primary); border-top: 1px solid var(--border); padding-top: 24px; margin: 56px 0 32px; }
+    .legal-foot {
+      border-top: 1px solid var(--border);
+      padding: clamp(24px, 3vw, 40px) var(--gutter);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .legal-foot-links {
+      display: flex; gap: 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .legal-foot-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .legal-foot-links a:hover { color: var(--text-primary); }
+    .legal-foot-links a.current { color: var(--text-dim); pointer-events: none; }
+    .legal-foot-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="legal-nav">
+    <a href="/" class="nav-brand">
+      <span class="glyph" aria-hidden="true"></span>
+      <span>Tactician</span>
+    </a>
+  </nav>
+
+  <main class="legal-main">
+    <div class="legal-page-label"><span class="dot"></span> Help</div>
+    <h1 class="legal-h1">Support</h1>
+    <div class="legal-meta">Last updated · October 2026</div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Contact</div>
+      <p>Email <a href="mailto:hello@tactician.run">hello@tactician.run</a>. Include the email address you sign in with and, for a sync problem, the date of the activity. A person reads every message.</p>
+      <p>Tactician is in pre-launch. If you are not yet using the app, <a href="/#waitlist">join the waitlist</a>.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Getting Started</div>
+      <p>Sign in with Apple or Google, set your goal race, and connect Strava. Tactician needs Strava: your activities are its only input, so without them it cannot compute load or update the day's directive.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Strava Sync</div>
+      <p>Activities sync when you open the app and in the background. If a run is missing, open the app to trigger a sync, and check the activity is visible to Tactician in Strava. If Settings shows <em>Credentials lost · sync halted</em>, reconnect Strava from Settings.</p>
+      <p>To disconnect Tactician from Strava, remove it in your <a href="https://www.strava.com/settings/apps" target="_blank" rel="noopener">Strava settings</a>.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Subscriptions</div>
+      <p>Subscriptions are billed and managed by Apple.</p>
+      <ul>
+        <li><strong>Cancel or change plan:</strong> iPhone Settings → your name → Subscriptions, or <a href="https://apps.apple.com/account/subscriptions" target="_blank" rel="noopener">apps.apple.com/account/subscriptions</a></li>
+        <li><strong>Restore a purchase</strong> on a new device: tap Restore Purchase on the subscription screen</li>
+        <li><strong>Refunds:</strong> <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a></li>
+      </ul>
+      <p>Full terms, including automatic renewal and the free trial, are in the <a href="/terms#subscriptions">Terms of Use</a>.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Delete Your Account</div>
+      <p>In the app, go to Settings → Delete Account. This removes your account, training plan and workout history, and disconnects Strava. It cannot be undone. Deleting your account does not cancel an App Store subscription; cancel that separately. You can also ask for deletion by email at <a href="mailto:hello@tactician.run">hello@tactician.run</a>.</p>
+    </div>
+
+    <div class="legal-section">
+      <div class="legal-section-label">Privacy</div>
+      <p>What Tactician collects and why is in the <a href="/privacy">Privacy Notice</a>.</p>
+    </div>
+
+  </main>
+
+  <footer class="legal-foot">
+    <div class="legal-foot-links">
+      <a href="/">← tactician.run</a>
+      <a class="current" aria-current="page">Support</a>
+      <a href="/privacy">Privacy Notice</a>
+      <a href="/terms">Terms of Use</a>
+    </div>
+    <span class="legal-foot-copy">© 2026 Tactician</span>
+  </footer>
+
+</body>
+</html>
