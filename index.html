@@ -713,7 +713,7 @@
       <a href="https://www.instagram.com/tactician.run/" target="_blank" rel="noopener noreferrer">Instagram</a>
     </div>
     <div class="foot-meta">
-      <span>v1.1.0</span>
+      <span>v1.1.1</span>
       <div class="theme-toggle" id="theme-toggle" role="group" aria-label="Display mode">
         <button class="tt-opt" data-val="system">System</button>
         <button class="tt-opt" data-val="dark">Dark</button>
@@ -1076,7 +1076,7 @@
 <div class="consent" id="consent" role="dialog" aria-live="polite" aria-labelledby="consent-title" hidden>
   <div class="consent-inner">
     <div class="consent-copy">
-      <div class="consent-label" id="consent-title">Session recording</div>
+      <div class="consent-label" id="consent-title">Analytics</div>
       <p>With your permission, Microsoft Clarity records how you move through this site (pages, scrolling, clicks, mouse movement) so we can improve it, and sets two cookies to do so. Form entries are never recorded. Nothing is recorded unless you accept. <a href="/privacy#site">Privacy Notice</a></p>
     </div>
     <div class="consent-actions">
@@ -1108,7 +1108,7 @@
     function alertGpc() {
       el.hidden = false;
       el.querySelector('.consent-copy p').textContent =
-        'Your browser sends Global Privacy Control, so session recording stays off.';
+        'Your browser sends Global Privacy Control, so analytics stays off.';
       el.querySelector('.consent-actions').innerHTML =
         '<button type="button" class="consent-btn" data-consent="denied">Close</button>';
     }
